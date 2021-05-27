@@ -10,5 +10,6 @@
     <color name="color_main">#088EFA</color>
     <color name="color_main_50">#304FB1</color>
     <color name="transparent">#00000000</color>
-    <color name="grey">#F3F5FB</color>
+    <color name="half_transparent_white">#EFFFFFFF</color>
+    <color name="grey">#CED0D6</color>
 </resources>

@@ -7,7 +7,6 @@
     tools:context=".HomeFragment"
     android:background="@drawable/main_background">
 
-
     <TextView
         android:id="@+id/tv_home_month"
         android:layout_width="wrap_content"
@@ -30,7 +29,7 @@
         android:fontFamily="sans-serif-black"
         android:textColor="@color/white"
         android:text="TextView"
-        android:textSize="35sp"
+        android:textSize="45sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_home_month"
@@ -59,5 +58,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_home_month"
         />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_home_balance"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/home_box_background_dim_white"
+        >
+
+        <include layout="@layout/home_box_month_budget" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
