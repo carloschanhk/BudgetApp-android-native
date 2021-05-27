@@ -1,14 +1,17 @@
-package com.example.budget
+package com.example.budget.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.budget.R
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     override fun onCreateView(
