@@ -7,10 +7,11 @@
     </data>
 
     <LinearLayout
+        android:background="@drawable/home_box_background_transparent_white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingVertical="20dp">
+        android:paddingTop="30dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,22 +20,24 @@
             android:layout_marginHorizontal="@dimen/horizontal_margin">
 
             <TextView
-                android:id="@+id/tv_month_budget_title"
+                android:id="@+id/tv_title_month_budget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Month budget"
-                android:layout_marginRight="20dp"/>
+                android:textColor="@color/black"
+                android:layout_marginEnd="20dp"/>
             <TextView
                 android:id="@+id/tv_month_budget"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="@color/grey"
                 tools:text="$8,000"/>
             <TextView
                 android:id="@+id/tv_month_budget_percentage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:textColor="@color/black"
                 tools:text="65%"/>
 
         </LinearLayout>
@@ -47,7 +50,7 @@
             android:layout_marginVertical="10dp"
             android:scaleY="2"
             android:max="100"
-            android:progress="50"
+            android:progress="100"
             android:progressDrawable="@drawable/progress_bar_horizontal_custom" />
     </LinearLayout>
 </layout>

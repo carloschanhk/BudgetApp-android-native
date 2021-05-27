@@ -13,9 +13,10 @@
             <shape>
                 <corners android:radius="5dp"/>
                 <gradient
-                    android:startColor="@color/color_main_50"
-                    android:centerColor="@color/color_main"
-                    android:angle="180"
+                    android:startColor="@color/color_main"
+                    android:centerColor="@color/color_main_50"
+                    android:endColor="@color/color_main_25"
+                    android:angle="0"
                     />
             </shape>
         </clip>
