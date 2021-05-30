@@ -3,9 +3,13 @@ package com.example.budget.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.budget.common.CategoryType
 import com.example.budget.data.expense.CategoryWithTransactions
 import com.example.budget.repository.ExpenseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,26 +34,26 @@ class HomeViewModel @Inject constructor(expenseRepository: ExpenseRepository) : 
     private val _healthExpenses = MutableLiveData<List<CategoryWithTransactions>>()
     val healthExpenses : LiveData<List<CategoryWithTransactions>> get() = _healthExpenses
 
-//    init {
-//        viewModelScope.launch {
-//            CategoryType.values().forEach {
-//                when (it) {
-//                    CategoryType.APPARELS -> _apparelsExpenses.value =
-//                        expenseRepository.getCategoryList(it.type)
-//                    CategoryType.FOOD -> _foodExpenses.value =
-//                        expenseRepository.getCategoryList(it.type)
-//                    CategoryType.HOUSING -> _housingExpenses.value =
-//                        expenseRepository.getCategoryList(it.type)
-//                    CategoryType.TRANSIT -> _transitExpenses.value =
-//                        expenseRepository.getCategoryList(it.type)
-//                    CategoryType.SHOPS -> _shoppingExpenses.value =
-//                        expenseRepository.getCategoryList(it.type)
-//                    CategoryType.HEALTH -> _healthExpenses.value =
-//                        expenseRepository.getCategoryList(it.type)
-//                }
-//            }
-//        }
-//    }
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            CategoryType.values().forEach {
+                when (it) {
+                    CategoryType.APPARELS -> _apparelsExpenses.postValue(
+                        expenseRepository.getCategoryList(it.type))
+                    CategoryType.FOOD -> _foodExpenses.postValue(
+                        expenseRepository.getCategoryList(it.type))
+                    CategoryType.HOUSING -> _housingExpenses.postValue(
+                        expenseRepository.getCategoryList(it.type))
+                    CategoryType.TRANSIT -> _transitExpenses.postValue(
+                        expenseRepository.getCategoryList(it.type))
+                    CategoryType.SHOPS -> _shoppingExpenses.postValue(
+                        expenseRepository.getCategoryList(it.type))
+                    CategoryType.HEALTH -> _healthExpenses.postValue(
+                        expenseRepository.getCategoryList(it.type))
+                }
+            }
+        }
+    }
 
 
 }
