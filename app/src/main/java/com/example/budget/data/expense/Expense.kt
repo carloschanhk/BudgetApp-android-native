@@ -1,15 +1,30 @@
 package com.example.budget.data.expense
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
+import androidx.room.Relation
 
-@Entity(tableName = "expense")
-data class Expense(
-    val category: String?,
-    val date: Date?,
+@Entity(tableName = "transaction")
+data class Transaction(
+    val category: String,
+    val date: String?,
     val cost: Int?,
-    val title: String?,){
+    val title: String?){
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null
+    var transactionId: Int? = null
 }
+
+@Entity(tableName = "category")
+data class Category(
+    @PrimaryKey val categoryTitle: String,
+    )
+
+data class CategoryWithTransactions(
+    @Embedded val category: Category,
+    @Relation(
+        parentColumn = "categoryTitle",
+        entityColumn = "category"
+    )
+    val transaction: List<Transaction>
+)

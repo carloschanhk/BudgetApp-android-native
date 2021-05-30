@@ -41,10 +41,11 @@
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_transactions"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/horizontal_margin"
             android:scrollbars="vertical"
+            tools:listitem="@layout/home_item_transaction"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
 
