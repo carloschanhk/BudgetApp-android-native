@@ -13,4 +13,9 @@
     <color name="transparent">#00000000</color>
     <color name="transparent_white">#E6FFFFFF</color>
     <color name="grey">#8E8F93</color>
+    <color name="orange">#E89B2B</color>
+    <color name="pink">#9C27B0</color>
+    <color name="green">#4CAF50</color>
+    <color name="red">#DF2626</color>
+    <color name="yellow">#DEF414</color>
 </resources>

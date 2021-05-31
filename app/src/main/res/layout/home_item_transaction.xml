@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="categoryType"
             type="com.example.budget.common.CategoryType" />
+        <variable
+            name="context"
+            type="android.content.Context"/>
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,7 +26,8 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_shopping_cart_24"/>
+            android:src="@{categoryType.icon}"/>
+
         <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_centerInParent="true"
@@ -31,7 +35,9 @@
             android:layout_height="60dp"
             android:progress="100"
             android:max="100"
-            android:progressDrawable="@drawable/home_item_progress_bar"/>
+            android:progressDrawable="@drawable/housing_progressbar"
+            progressColor="@{categoryType.color}"
+            context="@{context}"/>
 
     </RelativeLayout>
 

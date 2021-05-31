@@ -9,15 +9,16 @@ import com.example.budget.databinding.HomeItemTransactionBinding
 
 class TransactionItemAdapter(private val context: Context, private val dataset: Array<CategoryType>) : RecyclerView.Adapter<TransactionItemAdapter.ItemViewHolder>(){
 
-    class ItemViewHolder(private val binding: HomeItemTransactionBinding): RecyclerView.ViewHolder(binding.root){
+    class ItemViewHolder(private val binding: HomeItemTransactionBinding, val context: Context): RecyclerView.ViewHolder(binding.root){
         fun bind(categoryType: CategoryType){
+            binding.context = context
             binding.categoryType = categoryType
             binding.executePendingBindings()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ItemViewHolder(HomeItemTransactionBinding.inflate(LayoutInflater.from(parent.context)))
+        return ItemViewHolder(HomeItemTransactionBinding.inflate(LayoutInflater.from(parent.context)),parent.context)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
