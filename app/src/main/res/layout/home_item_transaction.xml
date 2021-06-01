@@ -36,7 +36,7 @@
             android:progress="100"
             android:max="100"
             android:progressDrawable="@drawable/housing_progressbar"
-            progressColor="@{categoryType.color}"
+            type="@{categoryType}"
             context="@{context}"/>
 
     </RelativeLayout>

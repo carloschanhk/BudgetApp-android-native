@@ -1,5 +1,6 @@
 package com.example.budget.repository
 
+import android.util.Log
 import com.example.budget.data.expense.Category
 import com.example.budget.data.expense.CategoryWithTransactions
 import com.example.budget.data.expense.ExpenseDao
@@ -18,6 +19,10 @@ class ExpenseRepository @Inject constructor(private val expenseDao: ExpenseDao) 
     }
 
     suspend fun getCategoryList(type:String): List<CategoryWithTransactions>{
-        return expenseDao.getCategoryWithTransactions(type)
+
+        val list = expenseDao.getCategoryWithTransactions(type)
+
+        Log.d("repository", "$list")
+        return list
     }
 }

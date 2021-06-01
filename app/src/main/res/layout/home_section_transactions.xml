@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="childViewModel"
+            type="com.example.budget.ui.home.HomeViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -48,9 +50,8 @@
             android:layout_marginHorizontal="@dimen/horizontal_margin"
             android:scrollbars="none"
             tools:listitem="@layout/home_item_transaction"
+            app:listData="@{childViewModel.allExpenses}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
-
-
     </LinearLayout>
 </layout>

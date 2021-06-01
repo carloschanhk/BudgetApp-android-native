@@ -7,7 +7,7 @@ import androidx.room.Transaction
 interface ExpenseDao {
     @Transaction
     @Query("SELECT * FROM CATEGORY WHERE categoryTitle= :categoryType")
-    fun getCategoryWithTransactions(categoryType:String):List<CategoryWithTransactions>
+    fun getCategoryWithTransactions(categoryType: String):List<CategoryWithTransactions>
 
     @Insert
     fun createTransaction(transaction: com.example.budget.data.expense.Transaction)

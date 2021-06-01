@@ -85,7 +85,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="325dp"
         >
-        <include layout="@layout/home_section_transactions"/>
+        <include
+            android:id="@+id/home_bottom_section"
+            app:childViewModel="@{viewModel}"
+            layout="@layout/home_section_transactions"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

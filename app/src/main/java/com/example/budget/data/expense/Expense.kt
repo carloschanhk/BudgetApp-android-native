@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import com.example.budget.common.CategoryType
 
 @Entity(tableName = "transaction")
 data class Transaction(
@@ -18,6 +19,7 @@ data class Transaction(
 @Entity(tableName = "category")
 data class Category(
     @PrimaryKey val categoryTitle: String,
+    val type: CategoryType
     )
 
 data class CategoryWithTransactions(
