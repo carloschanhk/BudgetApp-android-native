@@ -2,11 +2,11 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="categoryType"
-            type="com.example.budget.common.CategoryType" />
-        <variable
             name="context"
             type="android.content.Context"/>
+        <variable
+            name="catWithTransactions"
+            type="java.util.List&lt;com.example.budget.data.expense.CategoryWithTransactions&gt;" />
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,7 +26,7 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@{categoryType.icon}"/>
+            android:src="@{catWithTransactions[0].category.type.icon}"/>
 
         <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -36,7 +36,7 @@
             android:progress="100"
             android:max="100"
             android:progressDrawable="@drawable/housing_progressbar"
-            type="@{categoryType}"
+            type="@{catWithTransactions[0].category.type}"
             context="@{context}"/>
 
     </RelativeLayout>
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             tools:text="Shops"
-            android:text="@{categoryType.type}"/>
+            android:text="@{catWithTransactions[0].category.type.type}"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,14 +78,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             tools:text="$2,800.00"
-            android:text="$2800.00"/>
+            app:categoryCost="@{catWithTransactions[0].transaction}"/>
 
         <TextView
             android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="15 transactions"
-            android:text="15 transactions"/>
+            app:numOfTransactions="@{catWithTransactions[0].transaction}" />
     </LinearLayout>
 
 

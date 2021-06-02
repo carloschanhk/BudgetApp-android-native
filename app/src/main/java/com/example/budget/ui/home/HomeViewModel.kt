@@ -1,6 +1,5 @@
 package com.example.budget.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,6 +43,9 @@ class HomeViewModel @Inject constructor(private val expenseRepository: ExpenseRe
 
     private val _allExpenses = MutableLiveData<List<List<CategoryWithTransactions>>>(listOf())
     val allExpenses: LiveData<List<List<CategoryWithTransactions>>> get() = _allExpenses
+
+    private val _monthBudget = MutableLiveData<Int>(0)
+    val monthBudget: LiveData<Int> get() = _monthBudget
 
     init {
         getAllExpenses()
@@ -95,8 +97,6 @@ class HomeViewModel @Inject constructor(private val expenseRepository: ExpenseRe
                 healthExpenses.value!!,
                 leisureExpenses.value!!
             )
-            Log.d("viewmodel", "${allExpenses.value}")
         }
-
     }
 }

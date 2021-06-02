@@ -1,13 +1,11 @@
 package com.example.budget.ui.home
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.budget.common.CategoryType
 import com.example.budget.data.expense.CategoryWithTransactions
 import com.example.budget.databinding.HomeItemTransactionBinding
 
@@ -31,9 +29,9 @@ class TransactionItemAdapter:
     }
 
     class ItemViewHolder(private val binding: HomeItemTransactionBinding, val context: Context): RecyclerView.ViewHolder(binding.root){
-        fun bind(categoryType: CategoryType){
+        fun bind(list: List<CategoryWithTransactions>){
             binding.context = context
-            binding.categoryType = categoryType
+            binding.catWithTransactions = list
             binding.executePendingBindings()
         }
     }
@@ -43,8 +41,7 @@ class TransactionItemAdapter:
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val type = getItem(position)[0].category.type
-        Log.d("in binding viewholder", "$type")
+        val type = getItem(position)
         holder.bind(type)
     }
 }

@@ -4,7 +4,7 @@
 
     <data>
         <variable
-            name="childViewModel"
+            name="viewModel"
             type="com.example.budget.ui.home.HomeViewModel" />
     </data>
 
@@ -50,7 +50,7 @@
             android:layout_marginHorizontal="@dimen/horizontal_margin"
             android:scrollbars="none"
             tools:listitem="@layout/home_item_transaction"
-            app:listData="@{childViewModel.allExpenses}"
+            app:listData="@{viewModel.allExpenses}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
     </LinearLayout>
