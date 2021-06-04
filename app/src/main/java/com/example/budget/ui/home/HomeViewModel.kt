@@ -41,8 +41,9 @@ class HomeViewModel @Inject constructor(private val expenseRepository: ExpenseRe
     private val _leisureExpenses = MutableLiveData<List<CategoryWithTransactions>>(listOf())
     val leisureExpenses: LiveData<List<CategoryWithTransactions>> get() = _leisureExpenses
 
-    private val _allExpenses = MutableLiveData<List<List<CategoryWithTransactions>>>(listOf())
-    val allExpenses: LiveData<List<List<CategoryWithTransactions>>> get() = _allExpenses
+    private val _allExpenses =
+        MutableLiveData<List<Pair<List<CategoryWithTransactions>, Int>>>(listOf(Pair(listOf(), 0)))
+    val allExpenses: LiveData<List<Pair<List<CategoryWithTransactions>, Int>>> get() = _allExpenses
 
     private val _monthBudget = MutableLiveData<Int>(0)
     val monthBudget: LiveData<Int> get() = _monthBudget
@@ -59,7 +60,7 @@ class HomeViewModel @Inject constructor(private val expenseRepository: ExpenseRe
         return sum
     }
 
-    private fun getAllExpenses(){
+    private fun getAllExpenses() {
         viewModelScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO) {
                 for (cat in CategoryType.values()) {
@@ -88,14 +89,14 @@ class HomeViewModel @Inject constructor(private val expenseRepository: ExpenseRe
                     }
                 }
             }
-            _allExpenses.value = listOf(
-                apparelsExpenses.value!!,
-                foodExpenses.value!!,
-                housingExpenses.value!!,
-                transitExpenses.value!!,
-                shoppingExpenses.value!!,
-                healthExpenses.value!!,
-                leisureExpenses.value!!
+            _allExpenses.value = listOf<Pair<List<CategoryWithTransactions>, Int>>(
+                Pair(apparelsExpenses.value!!, monthBudget.value!!),
+                Pair(foodExpenses.value!!, monthBudget.value!!),
+                Pair(housingExpenses.value!!, monthBudget.value!!),
+                Pair(transitExpenses.value!!, monthBudget.value!!),
+                Pair(shoppingExpenses.value!!, monthBudget.value!!),
+                Pair(healthExpenses.value!!, monthBudget.value!!),
+                Pair(leisureExpenses.value!!, monthBudget.value!!)
             )
         }
     }

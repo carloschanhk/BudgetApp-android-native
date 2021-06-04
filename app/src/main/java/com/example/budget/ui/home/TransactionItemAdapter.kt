@@ -10,28 +10,29 @@ import com.example.budget.data.expense.CategoryWithTransactions
 import com.example.budget.databinding.HomeItemTransactionBinding
 
 class TransactionItemAdapter:
-    ListAdapter<List<CategoryWithTransactions>, TransactionItemAdapter.ItemViewHolder>(DiffCallback){
+    ListAdapter<Pair<List<CategoryWithTransactions>,Int>, TransactionItemAdapter.ItemViewHolder>(DiffCallback){
 
-    companion object DiffCallback : DiffUtil.ItemCallback<List<CategoryWithTransactions>>(){
+    companion object DiffCallback : DiffUtil.ItemCallback<Pair<List<CategoryWithTransactions>,Int>>(){
         override fun areItemsTheSame(
-            oldItem: List<CategoryWithTransactions>,
-            newItem: List<CategoryWithTransactions>
+            oldItem: Pair<List<CategoryWithTransactions>,Int>,
+            newItem: Pair<List<CategoryWithTransactions>,Int>
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: List<CategoryWithTransactions>,
-            newItem: List<CategoryWithTransactions>
+            oldItem: Pair<List<CategoryWithTransactions>,Int>,
+            newItem: Pair<List<CategoryWithTransactions>,Int>
         ): Boolean {
-            return oldItem[0].category.type == newItem[0].category.type
+            return oldItem == newItem
         }
     }
 
     class ItemViewHolder(private val binding: HomeItemTransactionBinding, val context: Context): RecyclerView.ViewHolder(binding.root){
-        fun bind(list: List<CategoryWithTransactions>){
+        fun bind(pairItem: Pair<List<CategoryWithTransactions>,Int>){
             binding.context = context
-            binding.catWithTransactions = list
+            binding.catWithTransactions = pairItem.first
+            binding.monthBudget = pairItem.second
             binding.executePendingBindings()
         }
     }

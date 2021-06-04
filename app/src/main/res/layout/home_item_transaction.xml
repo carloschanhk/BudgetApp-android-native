@@ -7,6 +7,9 @@
         <variable
             name="catWithTransactions"
             type="java.util.List&lt;com.example.budget.data.expense.CategoryWithTransactions&gt;" />
+        <variable
+            name="monthBudget"
+            type="Integer" />
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -33,11 +36,12 @@
             android:layout_centerInParent="true"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:progress="100"
+            android:progress="0"
             android:max="100"
             android:progressDrawable="@drawable/housing_progressbar"
-            type="@{catWithTransactions[0].category.type}"
-            context="@{context}"/>
+            catWithTransactions="@{catWithTransactions}"
+            context="@{context}"
+            monthBudget="@{monthBudget}"/>
 
     </RelativeLayout>
 

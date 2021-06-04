@@ -10,14 +10,25 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budget.R
-import com.example.budget.common.CategoryType
 import com.example.budget.data.expense.CategoryWithTransactions
 import com.example.budget.data.expense.Transaction
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-@BindingAdapter(value=["type","context"],requireAll = true)
-fun bindColor(view: ProgressBar, type: CategoryType, context: Context){
-    view.progressDrawable = context.getDrawable(type.color)
+@BindingAdapter(value=["catWithTransactions","context","monthBudget"],requireAll = true)
+fun bindColor(view: ProgressBar, categoryWithTransactions: List<CategoryWithTransactions>?, context: Context, budget: Int){
+    if (categoryWithTransactions != null && categoryWithTransactions.isNotEmpty()){
+        view.progressDrawable = context.getDrawable(categoryWithTransactions[0].category.type.color)
+        var categoryCost = 0
+        for (item in categoryWithTransactions[0].transaction){
+            categoryCost += item.cost!!
+        }
+        if (budget == 0){
+            view.progress = 0
+        } else {
+            view.progress = categoryCost/budget
+        }
+    }
+
 }
 
 @BindingAdapter("android:src")
@@ -26,7 +37,7 @@ fun bindImage(view: ImageView, drawableId: Int){
 }
 
 @BindingAdapter("listData")
-fun bindRecyclerView(recyclerView: RecyclerView, data: List<List<CategoryWithTransactions>>?){
+fun bindRecyclerView(recyclerView: RecyclerView, data: List<Pair<List<CategoryWithTransactions>,Int>>?){
     val adapter = recyclerView.adapter as? TransactionItemAdapter
     adapter?.submitList(data)
 }
