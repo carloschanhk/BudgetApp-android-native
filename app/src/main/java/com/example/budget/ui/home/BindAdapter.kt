@@ -14,53 +14,68 @@ import com.example.budget.data.expense.CategoryWithTransactions
 import com.example.budget.data.expense.Transaction
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-@BindingAdapter(value=["catWithTransactions","context","monthBudget"],requireAll = true)
-fun bindColor(view: ProgressBar, categoryWithTransactions: List<CategoryWithTransactions>?, context: Context, budget: Int){
-    if (categoryWithTransactions != null && categoryWithTransactions.isNotEmpty()){
+@BindingAdapter(value = ["catWithTransactions", "context", "monthBudget"], requireAll = true)
+fun bindColor(
+    view: ProgressBar,
+    categoryWithTransactions: List<CategoryWithTransactions>?,
+    context: Context,
+    budget: Int
+) {
+    if (categoryWithTransactions != null && categoryWithTransactions.isNotEmpty()) {
         view.progressDrawable = context.getDrawable(categoryWithTransactions[0].category.type.color)
         var categoryCost = 0
-        for (item in categoryWithTransactions[0].transaction){
+        for (item in categoryWithTransactions[0].transaction) {
             categoryCost += item.cost!!
         }
-        if (budget == 0){
+        if (budget == 0) {
             view.progress = 0
         } else {
-            view.progress = categoryCost/budget
+            view.progress = categoryCost / budget
         }
+    } else {
+        view.progressDrawable = context.getDrawable(R.drawable.progressbar_blank)
     }
 
 }
 
 @BindingAdapter("android:src")
-fun bindImage(view: ImageView, drawableId: Int){
+fun bindImage(view: ImageView, drawableId: Int) {
     view.setImageResource(drawableId)
 }
 
 @BindingAdapter("listData")
-fun bindRecyclerView(recyclerView: RecyclerView, data: List<Pair<List<CategoryWithTransactions>,Int>>?){
+fun bindRecyclerView(
+    recyclerView: RecyclerView,
+    data: List<Pair<List<CategoryWithTransactions>, Int>>?
+) {
     val adapter = recyclerView.adapter as? TransactionItemAdapter
     adapter?.submitList(data)
 }
 
 @BindingAdapter("categoryCost")
-fun bindCostToText(textView: TextView, list: List<Transaction>?){
-    Log.d("bindAdapter","$list")
+fun bindCostToText(textView: TextView, list: List<Transaction>?) {
+    Log.d("bindAdapter", "$list")
     var sum = 0
     if (list != null) {
-        for (item in list){
+        for (item in list) {
             sum += item.cost!!
         }
+        textView.text = textView.resources.getString(R.string.money_amount, sum)
     }
-    textView.text = textView.resources.getString(R.string.money_amount,sum)
+
 }
+
 @BindingAdapter("numOfTransactions")
-fun bindNumToText(textView: TextView, list: List<Transaction>?){
+fun bindNumToText(textView: TextView, list: List<Transaction>?) {
     if (list != null) {
-        if (list.isEmpty()){
-            textView.text = textView.resources.getString(R.string.transaction,0)
+        if (list.isEmpty()) {
+            textView.text = textView.resources.getString(R.string.transaction, 0)
         } else {
-            textView.text = textView.resources.getQuantityString(R.plurals.num_of_transactions, list.size,list.size)
+            textView.text = textView.resources.getQuantityString(
+                R.plurals.num_of_transactions,
+                list.size,
+                list.size
+            )
         }
-        Log.d("numtotext","${list.size}")
     }
 }
