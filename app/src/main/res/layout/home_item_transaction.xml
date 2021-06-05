@@ -47,7 +47,7 @@
                 android:max="100"
                 android:progress="0"
                 tools:progressBackgroundTint="@color/grey"
-                tools:progressDrawable="@drawable/housing_progressbar"
+                tools:progressDrawable="@drawable/progressbar_housing"
                 tools:progressTint="@color/yellow" />
 
         </RelativeLayout>
