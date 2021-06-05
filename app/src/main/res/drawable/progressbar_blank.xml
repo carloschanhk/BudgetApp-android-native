@@ -7,7 +7,7 @@
             android:shape="ring"
             android:thickness="3dp"
             android:useLevel="false">
-            <solid android:color="@color/grey" />
+            <solid android:color="@color/transparent" />
         </shape>
     </item>
 
@@ -19,7 +19,7 @@
                 android:innerRadius="25dp"
                 android:shape="ring"
                 android:thickness="3dp">
-                <solid android:color="@color/green" />
+                <solid android:color="@color/transparent" />
             </shape>
         </rotate>
     </item>

@@ -1,97 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="context"
-            type="android.content.Context"/>
+            type="android.content.Context" />
+
         <variable
             name="catWithTransactions"
             type="java.util.List&lt;com.example.budget.data.expense.CategoryWithTransactions&gt;" />
+
         <variable
             name="monthBudget"
             type="Integer" />
     </data>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingVertical="10dp">
 
-    <RelativeLayout
-        android:id="@+id/icon_circular_progressbar"
-        android:layout_width="wrap_content"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_alignParentStart="true">
+        android:orientation="horizontal"
+        android:paddingVertical="10dp">
 
-        <ImageView
-            android:layout_centerInParent="true"
+        <RelativeLayout
+            android:id="@+id/icon_circular_progressbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@{catWithTransactions[0].category.type.icon}"/>
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center">
 
-        <ProgressBar
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_centerInParent="true"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:progress="0"
-            android:max="100"
-            android:progressDrawable="@drawable/housing_progressbar"
-            catWithTransactions="@{catWithTransactions}"
-            context="@{context}"
-            monthBudget="@{monthBudget}"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@{catWithTransactions[0].category.type.icon}" />
+
+            <ProgressBar
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                catWithTransactions="@{catWithTransactions}"
+                context="@{context}"
+                monthBudget="@{monthBudget}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:max="100"
+                android:progress="0"
+                tools:progressBackgroundTint="@color/grey"
+                tools:progressDrawable="@drawable/housing_progressbar"
+                tools:progressTint="@color/yellow" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/icon_circular_progressbar"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@{catWithTransactions[0].category.type.type}"
+                tools:text="Shops" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="46% of budget" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="5dp"
+                app:categoryCost="@{catWithTransactions[0].transaction}"
+                tools:text="$2,800.00" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                app:numOfTransactions="@{catWithTransactions[0].transaction}"
+                tools:text="15 transactions" />
+        </LinearLayout>
+
 
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_marginStart="20dp"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/icon_circular_progressbar">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            tools:text="Shops"
-            android:text="@{catWithTransactions[0].category.type.type}"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="46% of budget"
-            android:text="46% of budget"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true">
-
-        <TextView
-            android:layout_gravity="end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            tools:text="$2,800.00"
-            app:categoryCost="@{catWithTransactions[0].transaction}"/>
-
-        <TextView
-            android:layout_gravity="end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="15 transactions"
-            app:numOfTransactions="@{catWithTransactions[0].transaction}" />
-    </LinearLayout>
-
-
-</RelativeLayout>
 </layout>
