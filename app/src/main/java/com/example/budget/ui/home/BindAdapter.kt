@@ -79,3 +79,23 @@ fun bindNumToText(textView: TextView, list: List<Transaction>?) {
         }
     }
 }
+
+@BindingAdapter("budgetPercentage")
+fun bindPercentageToText(textView: TextView, list: List<Transaction>?) {
+    if (list != null) {
+        var categoryCost = 0
+        for (item in list) {
+            categoryCost += item.cost!!
+        }
+        textView.text = textView.resources.getString(R.string.budget_percentage, categoryCost)
+    }
+}
+
+@BindingAdapter(value = ["totalExpenses","monthBudget"], requireAll = true)
+fun bindMonthBudgetPercentage(textView: TextView, monthBudget: Int, totalExpenses:Int){
+    if (monthBudget > 0){
+        textView.text = textView.resources.getString(R.string.num_of_percent,(totalExpenses/monthBudget))
+    } else {
+        textView.text = textView.resources.getString(R.string.num_of_percent,0)
+    }
+}

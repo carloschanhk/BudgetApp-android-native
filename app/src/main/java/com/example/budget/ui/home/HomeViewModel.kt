@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.budget.common.CategoryType
 import com.example.budget.data.expense.CategoryWithTransactions
-import com.example.budget.data.expense.Transaction
 import com.example.budget.repository.ExpenseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -48,16 +47,21 @@ class HomeViewModel @Inject constructor(private val expenseRepository: ExpenseRe
     private val _monthBudget = MutableLiveData<Int>(0)
     val monthBudget: LiveData<Int> get() = _monthBudget
 
+    private val _totalExpenses = MutableLiveData<Int>(0)
+    val totalExpenses: LiveData<Int> get() = _totalExpenses
+
     init {
         getAllExpenses()
     }
 
-    fun totalExpenses(list: List<Transaction>): Int {
-        var sum = 0
-        for (item in list) {
-            sum += item.cost!!
+    fun updateTotalExpenses() {
+        for (categoryPair in allExpenses.value!!){
+            for (transaction in categoryPair.first[0].transaction){
+                _totalExpenses.value?.let {
+                    _totalExpenses.value = it + transaction.cost!!
+                }
+            }
         }
-        return sum
     }
 
     private fun getAllExpenses() {
@@ -98,6 +102,7 @@ class HomeViewModel @Inject constructor(private val expenseRepository: ExpenseRe
                 Pair(healthExpenses.value!!, monthBudget.value!!),
                 Pair(leisureExpenses.value!!, monthBudget.value!!)
             )
+            updateTotalExpenses()
         }
     }
 }

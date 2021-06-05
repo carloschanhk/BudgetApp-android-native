@@ -14,8 +14,10 @@
         <item>Shopping</item>
         <item>Health</item>
     </string-array>
-    <string name="money_amount">$ %d</string>
+    <string name="money_amount">$%d</string>
     <string name="transaction">%d transaction</string>
+    <string name="budget_percentage">%d%%  of budget </string>
+    <string name="num_of_percent">%d%%</string>
     <plurals name="num_of_transactions">
         <item quantity="one">@string/transaction</item>
         <item quantity="other">%d transactions</item>
