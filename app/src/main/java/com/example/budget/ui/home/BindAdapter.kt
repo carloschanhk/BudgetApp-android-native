@@ -10,21 +10,22 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budget.R
-import com.example.budget.data.expense.CategoryWithTransactions
+import com.example.budget.common.CategoryType
 import com.example.budget.data.expense.Transaction
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-@BindingAdapter(value = ["catWithTransactions", "context", "monthBudget"], requireAll = true)
-fun bindColor(
+@BindingAdapter(value = ["transactions", "context", "monthBudget", "type"], requireAll = true)
+fun bindProgressBar(
     view: ProgressBar,
-    categoryWithTransactions: List<CategoryWithTransactions>?,
+    transactions: List<Transaction>?,
     context: Context,
-    budget: Int
+    budget: Int,
+    type: CategoryType
 ) {
-    if (categoryWithTransactions != null && categoryWithTransactions.isNotEmpty()) {
-        view.progressDrawable = context.getDrawable(categoryWithTransactions[0].category.type.color)
+    if (transactions != null) {
+        view.progressDrawable = context.getDrawable(type.color)
         var categoryCost = 0
-        for (item in categoryWithTransactions[0].transaction) {
+        for (item in transactions) {
             categoryCost += item.cost!!
         }
         if (budget == 0) {
@@ -46,7 +47,7 @@ fun bindImage(view: ImageView, drawableId: Int) {
 @BindingAdapter("listData")
 fun bindRecyclerView(
     recyclerView: RecyclerView,
-    data: List<Pair<List<CategoryWithTransactions>, Int>>?
+    data: List<Triple<List<Transaction>, Int, CategoryType>>?
 ) {
     val adapter = recyclerView.adapter as? TransactionItemAdapter
     adapter?.submitList(data)
@@ -62,7 +63,6 @@ fun bindCostToText(textView: TextView, list: List<Transaction>?) {
         }
         textView.text = textView.resources.getString(R.string.money_amount, sum)
     }
-
 }
 
 @BindingAdapter("numOfTransactions")
@@ -91,11 +91,19 @@ fun bindPercentageToText(textView: TextView, list: List<Transaction>?) {
     }
 }
 
-@BindingAdapter(value = ["totalExpenses","monthBudget"], requireAll = true)
-fun bindMonthBudgetPercentage(textView: TextView, monthBudget: Int, totalExpenses:Int){
-    if (monthBudget > 0){
-        textView.text = textView.resources.getString(R.string.num_of_percent,(totalExpenses/monthBudget))
+@BindingAdapter(value = ["totalExpenses", "monthBudget"], requireAll = true)
+fun bindMonthBudgetPercentage(textView: TextView, monthBudget: Int, totalExpenses: Int) {
+    if (monthBudget > 0) {
+        textView.text =
+            textView.resources.getString(R.string.num_of_percent, (totalExpenses / monthBudget))
     } else {
-        textView.text = textView.resources.getString(R.string.num_of_percent,0)
+        textView.text = textView.resources.getString(R.string.num_of_percent, 0)
+    }
+}
+
+@BindingAdapter(value = ["totalExpenses", "monthBudget"], requireAll = true)
+fun bindBudgetToProgressBar(progressBar: ProgressBar, monthBudget: Int, totalExpenses: Int){
+    if (monthBudget > 0) {
+        progressBar.progress = totalExpenses/monthBudget
     }
 }

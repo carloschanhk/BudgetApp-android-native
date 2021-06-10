@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.budget.common.CategoryType
-import com.example.budget.data.expense.CategoryWithTransactions
-import com.example.budget.repository.ExpenseRepository
+import com.example.budget.data.expense.Transaction
+import com.example.budget.repository.BudgetRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,35 +14,35 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val expenseRepository: ExpenseRepository) :
+class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepository) :
     ViewModel() {
     private val _selectedMonth = MutableLiveData<String>("June")
     val selectedMonth: LiveData<String> get() = _selectedMonth
 
-    private val _apparelsExpenses = MutableLiveData<List<CategoryWithTransactions>>(listOf())
-    val apparelsExpenses: LiveData<List<CategoryWithTransactions>> get() = _apparelsExpenses
+    private val _apparelsExpenses = MutableLiveData<List<Transaction>>(listOf())
+    val apparelsExpenses: LiveData<List<Transaction>> get() = _apparelsExpenses
 
-    private val _foodExpenses = MutableLiveData<List<CategoryWithTransactions>>(listOf())
-    val foodExpenses: LiveData<List<CategoryWithTransactions>> get() = _foodExpenses
+    private val _foodExpenses = MutableLiveData<List<Transaction>>(listOf())
+    val foodExpenses: LiveData<List<Transaction>> get() = _foodExpenses
 
-    private val _housingExpenses = MutableLiveData<List<CategoryWithTransactions>>(listOf())
-    val housingExpenses: LiveData<List<CategoryWithTransactions>> get() = _housingExpenses
+    private val _housingExpenses = MutableLiveData<List<Transaction>>(listOf())
+    val housingExpenses: LiveData<List<Transaction>> get() = _housingExpenses
 
-    private val _transitExpenses = MutableLiveData<List<CategoryWithTransactions>>(listOf())
-    val transitExpenses: LiveData<List<CategoryWithTransactions>> get() = _transitExpenses
+    private val _transitExpenses = MutableLiveData<List<Transaction>>(listOf())
+    val transitExpenses: LiveData<List<Transaction>> get() = _transitExpenses
 
-    private val _shoppingExpenses = MutableLiveData<List<CategoryWithTransactions>>(listOf())
-    val shoppingExpenses: LiveData<List<CategoryWithTransactions>> get() = _shoppingExpenses
+    private val _shoppingExpenses = MutableLiveData<List<Transaction>>(listOf())
+    val shoppingExpenses: LiveData<List<Transaction>> get() = _shoppingExpenses
 
-    private val _healthExpenses = MutableLiveData<List<CategoryWithTransactions>>(listOf())
-    val healthExpenses: LiveData<List<CategoryWithTransactions>> get() = _healthExpenses
+    private val _healthExpenses = MutableLiveData<List<Transaction>>(listOf())
+    val healthExpenses: LiveData<List<Transaction>> get() = _healthExpenses
 
-    private val _leisureExpenses = MutableLiveData<List<CategoryWithTransactions>>(listOf())
-    val leisureExpenses: LiveData<List<CategoryWithTransactions>> get() = _leisureExpenses
+    private val _leisureExpenses = MutableLiveData<List<Transaction>>(listOf())
+    val leisureExpenses: LiveData<List<Transaction>> get() = _leisureExpenses
 
     private val _allExpenses =
-        MutableLiveData<List<Pair<List<CategoryWithTransactions>, Int>>>(listOf(Pair(listOf(), 0)))
-    val allExpenses: LiveData<List<Pair<List<CategoryWithTransactions>, Int>>> get() = _allExpenses
+        MutableLiveData<List<Triple<List<Transaction>, Int, CategoryType>>>(listOf())
+    val allExpenses: MutableLiveData<List<Triple<List<Transaction>, Int, CategoryType>>> get() = _allExpenses
 
     private val _monthBudget = MutableLiveData<Int>(0)
     val monthBudget: LiveData<Int> get() = _monthBudget
@@ -54,55 +54,44 @@ class HomeViewModel @Inject constructor(private val expenseRepository: ExpenseRe
         getAllExpenses()
     }
 
-    fun updateTotalExpenses() {
-        for (categoryPair in allExpenses.value!!){
-            for (transaction in categoryPair.first[0].transaction){
-                _totalExpenses.value?.let {
-                    _totalExpenses.value = it + transaction.cost!!
-                }
-            }
-        }
-    }
-
     private fun getAllExpenses() {
         viewModelScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO) {
                 for (cat in CategoryType.values()) {
                     when (cat.type) {
                         "Apparels" -> _apparelsExpenses.postValue(
-                            expenseRepository.getCategoryList(cat.type)
+                            budgetRepository.getTransactions(cat.type)
                         )
                         "Food" -> _foodExpenses.postValue(
-                            expenseRepository.getCategoryList(cat.type)
+                            budgetRepository.getTransactions(cat.type)
                         )
                         "Housing" -> _housingExpenses.postValue(
-                            expenseRepository.getCategoryList(cat.type)
+                            budgetRepository.getTransactions(cat.type)
                         )
                         "Transit" -> _transitExpenses.postValue(
-                            expenseRepository.getCategoryList(cat.type)
+                            budgetRepository.getTransactions(cat.type)
                         )
                         "Shops" -> _shoppingExpenses.postValue(
-                            expenseRepository.getCategoryList(cat.type)
+                            budgetRepository.getTransactions(cat.type)
                         )
                         "Health" -> _healthExpenses.postValue(
-                            expenseRepository.getCategoryList(cat.type)
+                            budgetRepository.getTransactions(cat.type)
                         )
                         else -> _leisureExpenses.postValue(
-                            expenseRepository.getCategoryList(cat.type)
+                            budgetRepository.getTransactions(cat.type)
                         )
                     }
                 }
             }
-            _allExpenses.value = listOf<Pair<List<CategoryWithTransactions>, Int>>(
-                Pair(apparelsExpenses.value!!, monthBudget.value!!),
-                Pair(foodExpenses.value!!, monthBudget.value!!),
-                Pair(housingExpenses.value!!, monthBudget.value!!),
-                Pair(transitExpenses.value!!, monthBudget.value!!),
-                Pair(shoppingExpenses.value!!, monthBudget.value!!),
-                Pair(healthExpenses.value!!, monthBudget.value!!),
-                Pair(leisureExpenses.value!!, monthBudget.value!!)
+            _allExpenses.value = listOf<Triple<List<Transaction>, Int, CategoryType>>(
+                Triple(apparelsExpenses.value!!, monthBudget.value!!, CategoryType.APPARELS),
+                Triple(foodExpenses.value!!, monthBudget.value!!, CategoryType.FOOD),
+                Triple(housingExpenses.value!!, monthBudget.value!!, CategoryType.HOUSING),
+                Triple(transitExpenses.value!!, monthBudget.value!!, CategoryType.TRANSIT),
+                Triple(shoppingExpenses.value!!, monthBudget.value!!, CategoryType.SHOPS),
+                Triple(healthExpenses.value!!, monthBudget.value!!, CategoryType.HEALTH),
+                Triple(leisureExpenses.value!!, monthBudget.value!!, CategoryType.LEISURE)
             )
-            updateTotalExpenses()
         }
     }
 }

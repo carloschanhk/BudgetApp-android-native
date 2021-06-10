@@ -6,33 +6,35 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.budget.data.expense.CategoryWithTransactions
+import com.example.budget.common.CategoryType
+import com.example.budget.data.expense.Transaction
 import com.example.budget.databinding.HomeItemTransactionBinding
 
 class TransactionItemAdapter:
-    ListAdapter<Pair<List<CategoryWithTransactions>,Int>, TransactionItemAdapter.ItemViewHolder>(DiffCallback){
+    ListAdapter<Triple<List<Transaction>,Int,CategoryType>, TransactionItemAdapter.ItemViewHolder>(DiffCallback){
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Pair<List<CategoryWithTransactions>,Int>>(){
+    companion object DiffCallback : DiffUtil.ItemCallback<Triple<List<Transaction>,Int,CategoryType>>(){
         override fun areItemsTheSame(
-            oldItem: Pair<List<CategoryWithTransactions>,Int>,
-            newItem: Pair<List<CategoryWithTransactions>,Int>
+            oldItem: Triple<List<Transaction>,Int,CategoryType>,
+            newItem: Triple<List<Transaction>,Int,CategoryType>
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: Pair<List<CategoryWithTransactions>,Int>,
-            newItem: Pair<List<CategoryWithTransactions>,Int>
+            oldItem: Triple<List<Transaction>,Int,CategoryType>,
+            newItem: Triple<List<Transaction>,Int,CategoryType>
         ): Boolean {
             return oldItem == newItem
         }
     }
 
     class ItemViewHolder(private val binding: HomeItemTransactionBinding, val context: Context): RecyclerView.ViewHolder(binding.root){
-        fun bind(pairItem: Pair<List<CategoryWithTransactions>,Int>){
+        fun bind(tripleItem: Triple<List<Transaction>,Int,CategoryType>){
             binding.context = context
-            binding.catWithTransactions = pairItem.first
-            binding.monthBudget = pairItem.second
+            binding.transactions = tripleItem.first
+            binding.monthBudget = tripleItem.second
+            binding.categoryType = tripleItem.third
             binding.executePendingBindings()
         }
     }
