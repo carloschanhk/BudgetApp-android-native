@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                app:monthBudget="@{viewModel.monthBudget.intValue()}"
+                app:monthBudget="@{viewModel.monthBudget}"
                 app:totalExpenses="@{viewModel.totalExpenses.intValue()}"
                 tools:text="65%"/>
 
@@ -57,7 +57,7 @@
             android:layout_marginVertical="10dp"
             android:scaleY="2"
             android:max="100"
-            app:monthBudget="@{viewModel.monthBudget.intValue()}"
+            app:monthBudget="@{viewModel.monthBudget}"
             app:totalExpenses="@{viewModel.totalExpenses.intValue()}"
             android:progressDrawable="@drawable/progress_bar_horizontal_custom" />
     </LinearLayout>

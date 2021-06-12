@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExpenseDao {
@@ -27,5 +28,5 @@ interface ExpenseDao {
     fun deleteTransaction(transaction: com.example.budget.data.expense.Transaction)
 
     @Query("SELECT * FROM `transaction` WHERE category= :category")
-    fun getTransactions(category: String): List<Transaction>
+    fun getTransactions(category: String): Flow<List<Transaction>>
 }
