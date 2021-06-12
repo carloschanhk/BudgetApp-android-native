@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class Transaction(
     val category: String,
     val date: String?,
-    val cost: Int?,
+    val cost: Float?,
     val title: String?){
     @PrimaryKey(autoGenerate = true)
     var transactionId: Int? = null

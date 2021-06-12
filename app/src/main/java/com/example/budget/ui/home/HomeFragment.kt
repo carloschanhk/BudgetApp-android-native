@@ -9,9 +9,6 @@ import androidx.fragment.app.viewModels
 import com.example.budget.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var binding: FragmentHomeBinding? = null

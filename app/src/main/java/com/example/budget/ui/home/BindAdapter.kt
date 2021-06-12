@@ -36,14 +36,14 @@ fun bindProgressBar(
     view.progressDrawable = context.getDrawable(type.color)
     if (transactions != null) {
 
-        var categoryCost = 0
+        var categoryCost = 0F
         for (item in transactions) {
             categoryCost += item.cost!!
         }
         if (budget == 0) {
             view.progress = 0
         } else {
-            view.progress = categoryCost / budget
+            view.progress = (categoryCost / budget).toInt()
         }
     }
 
@@ -56,7 +56,7 @@ fun bindImage(view: ImageView, drawableId: Int) {
 
 @BindingAdapter("categoryCost")
 fun bindCostToText(textView: TextView, list: List<Transaction>?) {
-    var sum = 0
+    var sum = 0F
     if (list != null) {
         for (item in list) {
             sum += item.cost!!
@@ -80,7 +80,7 @@ fun bindNumToText(textView: TextView, list: List<Transaction>?) {
 
 @BindingAdapter("budgetPercentage")
 fun bindPercentageToText(textView: TextView, list: List<Transaction>?) {
-    var categoryCost = 0
+    var categoryCost = 0F
     if (list != null) {
         for (item in list) {
             categoryCost += item.cost!!
