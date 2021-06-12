@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.budget.ui.dialog.SetBudgetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,7 +34,8 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_set_month_budget -> {
-                SetBudgetDialogFragment().show(supportFragmentManager, "SetBudgetDialog")
+//                SetBudgetDialogFragment().show(supportFragmentManager, "SetBudgetDialog")
+                navController.navigate(R.id.action_FirstFragment_to_setBudgetDialogFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)

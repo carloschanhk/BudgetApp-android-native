@@ -8,12 +8,15 @@
     <fragment
         android:id="@+id/FirstFragment"
         android:name="com.example.budget.ui.home.HomeFragment"
-        android:label="@string/first_fragment_label"
+        android:label="Expenses"
         tools:layout="@layout/fragment_home">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_setBudgetDialogFragment"
+            app:destination="@id/setBudgetDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -25,4 +28,8 @@
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/setBudgetDialogFragment"
+        android:name="com.example.budget.ui.dialog.SetBudgetDialogFragment"
+        android:label="SetBudgetDialogFragment" />
 </navigation>
