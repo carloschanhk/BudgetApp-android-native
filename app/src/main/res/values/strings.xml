@@ -13,6 +13,7 @@
         <item>Transit</item>
         <item>Shopping</item>
         <item>Health</item>
+        <item>Leisure</item>
     </string-array>
     <string-array name="months">
         <item>January</item>

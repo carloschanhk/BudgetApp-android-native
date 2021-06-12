@@ -9,7 +9,7 @@ enum class CategoryType(val type: String, val icon: Int, val color: Int) {
         R.drawable.ic_baseline_home_24,
         R.drawable.progressbar_housing
     ),
-    SHOPS("Shops", R.drawable.ic_baseline_shopping_cart_24, R.drawable.progressbar_shops),
+    SHOPPING("Shopping", R.drawable.ic_baseline_shopping_cart_24, R.drawable.progressbar_shops),
     FOOD(
         "Food",
         R.drawable.ic_baseline_fastfood_24,
