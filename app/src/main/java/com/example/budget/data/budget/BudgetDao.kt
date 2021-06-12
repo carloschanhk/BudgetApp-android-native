@@ -7,4 +7,6 @@ import androidx.room.Query
 interface BudgetDao {
     @Query("SELECT * FROM monthBudget WHERE month= :month")
     fun getMonthBudget(month: String): MonthBudget
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun setMonthBudget(monthBudget: MonthBudget)
 }
