@@ -62,7 +62,7 @@ fun bindCostToText(textView: TextView, list: List<Transaction>?) {
             sum += item.cost!!
         }
     }
-    textView.text = textView.resources.getString(R.string.money_amount, sum)
+    textView.text = textView.resources.getString(R.string.money_amount, sum.toInt())
 }
 
 @BindingAdapter("numOfTransactions")
@@ -78,15 +78,21 @@ fun bindNumToText(textView: TextView, list: List<Transaction>?) {
     }
 }
 
-@BindingAdapter("budgetPercentage")
-fun bindPercentageToText(textView: TextView, list: List<Transaction>?) {
+@BindingAdapter(value = ["budgetPercentage", "monthBudget"], requireAll = true)
+fun bindPercentageToText(textView: TextView, list: List<Transaction>?, monthBudget: Int) {
     var categoryCost = 0F
     if (list != null) {
         for (item in list) {
             categoryCost += item.cost!!
         }
     }
-    textView.text = textView.resources.getString(R.string.budget_percentage, categoryCost)
+    if (monthBudget > 0) {
+        var percentage = (categoryCost.toInt() / monthBudget)
+        textView.text = textView.resources.getString(R.string.budget_percentage, percentage)
+    } else {
+        textView.text = textView.resources.getString(R.string.budget_percentage, 0)
+    }
+
 }
 
 //Month Budget Segment

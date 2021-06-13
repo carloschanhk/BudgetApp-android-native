@@ -76,6 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:budgetPercentage="@{transactions}"
+                app:monthBudget="@{monthBudget}"
                 tools:text="46% of budget" />
         </LinearLayout>
 
