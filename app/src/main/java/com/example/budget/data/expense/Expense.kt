@@ -2,11 +2,12 @@ package com.example.budget.data.expense
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(tableName = "transaction")
 data class Transaction(
     val category: String,
-    val date: String?,
+    val date: Date?,
     val cost: Float?,
     val title: String?){
     @PrimaryKey(autoGenerate = true)
