@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_setBudgetDialogFragment"
             app:destination="@id/setBudgetDialogFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_transactionCreationDialogFragment"
+            app:destination="@id/transactionCreationDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -32,4 +35,8 @@
         android:id="@+id/setBudgetDialogFragment"
         android:name="com.example.budget.ui.dialog.SetBudgetDialogFragment"
         android:label="SetBudgetDialogFragment" />
+    <dialog
+        android:id="@+id/transactionCreationDialogFragment"
+        android:name="com.example.budget.ui.dialog.TransactionCreationDialogFragment"
+        android:label="TransactionCreationDialogFragment" />
 </navigation>

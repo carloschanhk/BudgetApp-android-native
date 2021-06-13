@@ -38,6 +38,10 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(R.id.action_FirstFragment_to_setBudgetDialogFragment)
                 true
             }
+            R.id.action_add_expense -> {
+                navController.navigate(R.id.action_FirstFragment_to_transactionCreationDialogFragment)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

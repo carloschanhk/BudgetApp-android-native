@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="fragment"
             type="com.example.budget.ui.dialog.TransactionCreationDialogFragment" />
@@ -10,14 +12,16 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/horizontal_margin"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/horizontal_margin">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:fontFamily="sans-serif-black"
             android:text="Transaction Details"
+            android:textColor="@color/color_main"
             android:textSize="24sp" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -30,7 +34,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
+                android:fontFamily="@font/antic_slab"
                 android:text="Title: "
+                android:textColor="@color/color_main"
                 android:textSize="20sp" />
 
             <EditText
@@ -38,10 +44,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="20sp"
-                />
+                android:textSize="20sp" />
 
         </LinearLayout>
+
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,7 +58,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
+                android:fontFamily="@font/antic_slab"
                 android:text="Cost: "
+                android:textColor="@color/color_main"
                 android:textSize="20sp" />
 
             <EditText
@@ -60,11 +68,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="20sp"
                 android:inputType="numberDecimal"
-                />
+                android:textSize="20sp" />
 
         </LinearLayout>
+
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,17 +83,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
+                android:fontFamily="@font/antic_slab"
                 android:text="Category: "
+                android:textColor="@color/color_main"
                 android:textSize="20sp" />
 
             <Spinner
+                android:id="@+id/spinner_set_category"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:entries="@array/categories"
-                />
+                android:entries="@array/categories" />
 
         </LinearLayout>
+
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,17 +106,21 @@
                 android:id="@+id/tv_transaction_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginRight="15dp"
+                android:fontFamily="@font/antic_slab"
                 android:text="Date: "
+                android:textColor="@color/color_main"
                 android:textSize="20sp" />
 
-            <TextView
+            <DatePicker
                 android:id="@+id/date_picker"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                style="@style/Widget.AppCompat.Spinner"
-                />
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                tools:targetApi="lollipop" />
 
         </LinearLayout>
 
@@ -119,16 +134,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/transparent"
-                android:textColor="@color/color_main_50"
-                android:text="Cancel"/>
+                android:onClick="@{()->fragment.onCancel()}"
+                android:text="Cancel"
+                android:textColor="@color/color_main_50" />
 
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/transparent"
-                android:textColor="@color/color_main_50"
-                android:text="Confirm"/>
+                android:onClick="@{()-> fragment.onConfirm()}"
+                android:text="Confirm"
+                android:textColor="@color/color_main_50" />
 
         </LinearLayout>
 
