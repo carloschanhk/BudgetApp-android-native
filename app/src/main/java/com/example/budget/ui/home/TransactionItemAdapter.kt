@@ -3,6 +3,7 @@ package com.example.budget.ui.home
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,26 +12,26 @@ import com.example.budget.data.expense.Transaction
 import com.example.budget.databinding.HomeItemTransactionBinding
 
 class TransactionItemAdapter:
-    ListAdapter<Triple<List<Transaction>,Int,CategoryType>, TransactionItemAdapter.ItemViewHolder>(DiffCallback){
+    ListAdapter<Triple<LiveData<List<Transaction>>,LiveData<Int>,CategoryType>, TransactionItemAdapter.ItemViewHolder>(DiffCallback){
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Triple<List<Transaction>,Int,CategoryType>>(){
+    companion object DiffCallback : DiffUtil.ItemCallback<Triple<LiveData<List<Transaction>>,LiveData<Int>,CategoryType>>(){
         override fun areItemsTheSame(
-            oldItem: Triple<List<Transaction>,Int,CategoryType>,
-            newItem: Triple<List<Transaction>,Int,CategoryType>
+            oldItem: Triple<LiveData<List<Transaction>>,LiveData<Int>,CategoryType>,
+            newItem: Triple<LiveData<List<Transaction>>,LiveData<Int>,CategoryType>
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: Triple<List<Transaction>,Int,CategoryType>,
-            newItem: Triple<List<Transaction>,Int,CategoryType>
+            oldItem: Triple<LiveData<List<Transaction>>,LiveData<Int>,CategoryType>,
+            newItem: Triple<LiveData<List<Transaction>>,LiveData<Int>,CategoryType>
         ): Boolean {
             return oldItem == newItem
         }
     }
 
     class ItemViewHolder(private val binding: HomeItemTransactionBinding, val context: Context): RecyclerView.ViewHolder(binding.root){
-        fun bind(tripleItem: Triple<List<Transaction>,Int,CategoryType>){
+        fun bind(tripleItem: Triple<LiveData<List<Transaction>>,LiveData<Int>,CategoryType>){
             binding.context = context
             binding.transactions = tripleItem.first
             binding.monthBudget = tripleItem.second

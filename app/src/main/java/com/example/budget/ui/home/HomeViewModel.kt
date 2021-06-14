@@ -1,5 +1,6 @@
 package com.example.budget.ui.home
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.budget.common.CategoryType
 import com.example.budget.data.expense.Transaction
@@ -15,28 +16,37 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
     private val _selectedMonth = MutableLiveData<String>("June")
     val selectedMonth: LiveData<String> get() = _selectedMonth
 
-    val apparelsExpenses: LiveData<List<Transaction>> = budgetRepository.getTransactions("Apparels").asLiveData()
+    val apparelsExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Apparels").asLiveData()
 
-    val foodExpenses: LiveData<List<Transaction>> = budgetRepository.getTransactions("Food").asLiveData()
+    val foodExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Food").asLiveData()
 
-    val housingExpenses: LiveData<List<Transaction>> = budgetRepository.getTransactions("Housing").asLiveData()
+    val housingExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Housing").asLiveData()
 
-    val transitExpenses: LiveData<List<Transaction>> = budgetRepository.getTransactions("Transit").asLiveData()
+    val transitExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Transit").asLiveData()
 
-    val shoppingExpenses: LiveData<List<Transaction>> = budgetRepository.getTransactions("Shopping").asLiveData()
+    val shoppingExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Shopping").asLiveData()
 
-    val healthExpenses: LiveData<List<Transaction>> = budgetRepository.getTransactions("Health").asLiveData()
+    val healthExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Health").asLiveData()
 
-    val leisureExpenses: LiveData<List<Transaction>> = budgetRepository.getTransactions("Leisure").asLiveData()
+    val leisureExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Leisure").asLiveData()
 
     private val _allExpenses =
-        MutableLiveData<List<Triple<List<Transaction>?, Int?, CategoryType>>>(listOf())
-    val allExpenses: LiveData<List<Triple<List<Transaction>?, Int?, CategoryType>>> get() = _allExpenses
+        MutableLiveData<List<Triple<LiveData<MutableList<Transaction>>?, LiveData<Int>?, CategoryType>>>(listOf())
+    val allExpenses: LiveData<List<Triple<LiveData<MutableList<Transaction>>?, LiveData<Int>?, CategoryType>>> get() = _allExpenses
+
+    private val expenses = MediatorLiveData<List<Triple<List<Transaction>?, Int?, CategoryType>>>()
+
 
     val monthBudget: LiveData<Int> = budgetRepository.getMonthBudget("June").asLiveData()
 
-    private val _totalExpenses = MutableLiveData<Int>(0)
-    val totalExpenses: LiveData<Int> get() = _totalExpenses
+    private val _allTransactions = budgetRepository.getAllTransactions().asLiveData()
+    val totalExpenses: LiveData<Int> get() = Transformations.map(_allTransactions){
+        var sum = 0F
+        for (item in it){
+            sum += item.cost!!
+        }
+        sum.toInt()
+    }
 
     init {
         getAllExpenses()
@@ -44,14 +54,14 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
 
     private fun getAllExpenses() {
         viewModelScope.launch(Dispatchers.Main) {
-            _allExpenses.value = listOf<Triple<List<Transaction>?, Int?, CategoryType>>(
-                Triple(apparelsExpenses?.value, monthBudget?.value, CategoryType.APPARELS),
-                Triple(foodExpenses?.value, monthBudget?.value, CategoryType.FOOD),
-                Triple(housingExpenses?.value, monthBudget?.value, CategoryType.HOUSING),
-                Triple(transitExpenses?.value, monthBudget?.value, CategoryType.TRANSIT),
-                Triple(shoppingExpenses?.value, monthBudget?.value, CategoryType.SHOPPING),
-                Triple(healthExpenses?.value, monthBudget?.value, CategoryType.HEALTH),
-                Triple(leisureExpenses?.value, monthBudget?.value, CategoryType.LEISURE)
+            _allExpenses.value = listOf<Triple<LiveData<MutableList<Transaction>>?, LiveData<Int>?, CategoryType>>(
+                Triple(apparelsExpenses, monthBudget, CategoryType.APPARELS),
+                Triple(foodExpenses, monthBudget, CategoryType.FOOD),
+                Triple(housingExpenses, monthBudget, CategoryType.HOUSING),
+                Triple(transitExpenses, monthBudget, CategoryType.TRANSIT),
+                Triple(shoppingExpenses, monthBudget, CategoryType.SHOPPING),
+                Triple(healthExpenses, monthBudget, CategoryType.HEALTH),
+                Triple(leisureExpenses, monthBudget, CategoryType.LEISURE)
             )
         }
     }

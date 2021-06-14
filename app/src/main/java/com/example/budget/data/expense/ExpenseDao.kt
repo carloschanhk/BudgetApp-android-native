@@ -29,4 +29,5 @@ interface ExpenseDao {
 
     @Query("SELECT * FROM `transaction` WHERE category= :category")
     fun getTransactions(category: String): Flow<List<Transaction>>
+    fun getTransactions(category: String): Flow<MutableList<Transaction>>
 }
