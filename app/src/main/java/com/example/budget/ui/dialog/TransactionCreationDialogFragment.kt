@@ -32,6 +32,7 @@ class TransactionCreationDialogFragment : BottomSheetDialogFragment() {
     lateinit var etTransactionCost: EditText
     lateinit var spTransactionCategory: Spinner
     lateinit var datePicker: DatePicker
+    lateinit var flow: List<Transaction>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,7 +74,11 @@ class TransactionCreationDialogFragment : BottomSheetDialogFragment() {
         findNavController().navigateUp()
     }
 
-    fun onCancel(){
+    fun onCancel() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val list = budgetRepository.getAllTransactions()
+            Log.d("TRANSACTION DIALOG", "non-flow: $list")
+        }
         findNavController().navigateUp()
     }
 }

@@ -28,6 +28,8 @@ interface ExpenseDao {
     fun deleteTransaction(transaction: com.example.budget.data.expense.Transaction)
 
     @Query("SELECT * FROM `transaction` WHERE category= :category")
-    fun getTransactions(category: String): Flow<List<Transaction>>
     fun getTransactions(category: String): Flow<MutableList<Transaction>>
+
+    @Query("SELECT * FROM `transaction`")
+    fun getAllTransactions(): Flow<MutableList<Transaction>>
 }

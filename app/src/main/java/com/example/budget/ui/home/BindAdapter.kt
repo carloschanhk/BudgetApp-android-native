@@ -3,11 +3,13 @@ package com.example.budget.ui.home
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budget.R
 import com.example.budget.common.CategoryType
@@ -16,7 +18,7 @@ import com.example.budget.data.expense.Transaction
 @BindingAdapter("listData")
 fun bindRecyclerView(
     recyclerView: RecyclerView,
-    data: List<Triple<List<Transaction>, Int, CategoryType>>?
+    data: List<Triple<LiveData<List<Transaction>>, LiveData<Int>, CategoryType>>?
 ) {
     val adapter = recyclerView.adapter as? TransactionItemAdapter
     adapter?.submitList(data)
@@ -43,7 +45,9 @@ fun bindProgressBar(
         if (budget == 0) {
             view.progress = 0
         } else {
-            view.progress = (categoryCost / budget).toInt()
+            Log.d("TRANSACTION", "progress bar: ${view.progress}")
+            view.progress = (categoryCost / budget * 100).toInt()
+            Log.d("TRANSACTION", "progress bar: ${view.progress}")
         }
     }
 
@@ -78,7 +82,7 @@ fun bindNumToText(textView: TextView, list: List<Transaction>?) {
     }
 }
 
-@BindingAdapter(value = ["budgetPercentage", "monthBudget"], requireAll = true)
+@BindingAdapter(value = ["transactions", "monthBudget"], requireAll = true)
 fun bindPercentageToText(textView: TextView, list: List<Transaction>?, monthBudget: Int) {
     var categoryCost = 0F
     if (list != null) {
@@ -87,7 +91,7 @@ fun bindPercentageToText(textView: TextView, list: List<Transaction>?, monthBudg
         }
     }
     if (monthBudget > 0) {
-        var percentage = (categoryCost.toInt() / monthBudget)
+        var percentage = (categoryCost / monthBudget * 100).toInt()
         textView.text = textView.resources.getString(R.string.budget_percentage, percentage)
     } else {
         textView.text = textView.resources.getString(R.string.budget_percentage, 0)
@@ -97,18 +101,22 @@ fun bindPercentageToText(textView: TextView, list: List<Transaction>?, monthBudg
 
 //Month Budget Segment
 @BindingAdapter(value = ["totalExpenses", "monthBudget"], requireAll = true)
-fun bindMonthBudgetPercentage(textView: TextView, monthBudget: Int, totalExpenses: Int) {
+fun bindMonthBudgetPercentage(textView: TextView, totalExpenses: Int, monthBudget: Int) {
     if (monthBudget > 0) {
+        val percentage: Int = totalExpenses * 100 / monthBudget
         textView.text =
-            textView.resources.getString(R.string.num_of_percent, (totalExpenses / monthBudget))
+            textView.resources.getString(
+                R.string.num_of_percent,
+                percentage
+            )
     } else {
         textView.text = textView.resources.getString(R.string.num_of_percent, 0)
     }
 }
 
 @BindingAdapter(value = ["totalExpenses", "monthBudget"], requireAll = true)
-fun bindBudgetToProgressBar(progressBar: ProgressBar, monthBudget: Int, totalExpenses: Int) {
+fun bindBudgetToProgressBar(progressBar: ProgressBar, totalExpenses: Int, monthBudget: Int) {
     if (monthBudget > 0) {
-        progressBar.progress = totalExpenses / monthBudget
+        progressBar.progress = totalExpenses * 100 / monthBudget
     }
 }
