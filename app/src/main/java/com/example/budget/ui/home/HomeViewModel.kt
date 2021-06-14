@@ -1,68 +1,93 @@
 package com.example.budget.ui.home
 
-import android.util.Log
+import android.view.View
 import androidx.lifecycle.*
-import com.example.budget.common.CategoryType
+import com.example.budget.R
 import com.example.budget.data.expense.Transaction
 import com.example.budget.repository.BudgetRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepository) :
     ViewModel() {
-    private val _selectedMonth = MutableLiveData<String>("June")
+    private val _selectedMonth = MutableLiveData<String>(SimpleDateFormat("MMMM").format(Date()))
     val selectedMonth: LiveData<String> get() = _selectedMonth
 
-    val apparelsExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Apparels").asLiveData()
+    val apparelsExpenses: LiveData<MutableList<Transaction>> =
+        budgetRepository.getTransactions("Apparels").asLiveData()
 
-    val foodExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Food").asLiveData()
+    val foodExpenses: LiveData<MutableList<Transaction>> =
+        budgetRepository.getTransactions("Food").asLiveData()
 
-    val housingExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Housing").asLiveData()
+    val housingExpenses: LiveData<MutableList<Transaction>> =
+        budgetRepository.getTransactions("Housing").asLiveData()
 
-    val transitExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Transit").asLiveData()
+    val transitExpenses: LiveData<MutableList<Transaction>> =
+        budgetRepository.getTransactions("Transit").asLiveData()
 
-    val shoppingExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Shopping").asLiveData()
+    val shoppingExpenses: LiveData<MutableList<Transaction>> =
+        budgetRepository.getTransactions("Shopping").asLiveData()
 
-    val healthExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Health").asLiveData()
+    val healthExpenses: LiveData<MutableList<Transaction>> =
+        budgetRepository.getTransactions("Health").asLiveData()
 
-    val leisureExpenses: LiveData<MutableList<Transaction>> = budgetRepository.getTransactions("Leisure").asLiveData()
+    val leisureExpenses: LiveData<MutableList<Transaction>> =
+        budgetRepository.getTransactions("Leisure").asLiveData()
 
-    private val _allExpenses =
-        MutableLiveData<List<Triple<LiveData<MutableList<Transaction>>?, LiveData<Int>?, CategoryType>>>(listOf())
-    val allExpenses: LiveData<List<Triple<LiveData<MutableList<Transaction>>?, LiveData<Int>?, CategoryType>>> get() = _allExpenses
+//    val monthBudget: LiveData<Int> =
+//        budgetRepository.getMonthBudget(selectedMonth.value!!).asLiveData()
 
-    private val expenses = MediatorLiveData<List<Triple<List<Transaction>?, Int?, CategoryType>>>()
-
-
-    val monthBudget: LiveData<Int> = budgetRepository.getMonthBudget("June").asLiveData()
+    val monthBudget = MediatorLiveData<LiveData<Int>>()
 
     private val _allTransactions = budgetRepository.getAllTransactions().asLiveData()
-    val totalExpenses: LiveData<Int> get() = Transformations.map(_allTransactions){
-        var sum = 0F
-        for (item in it){
-            sum += item.cost!!
+    val totalExpenses: LiveData<Int>
+        get() = Transformations.map(_allTransactions) {
+            var sum = 0F
+            for (item in it) {
+                sum += item.cost!!
+            }
+            sum.toInt()
         }
-        sum.toInt()
-    }
 
     init {
-        getAllExpenses()
+        monthBudget.addSource(selectedMonth) { month ->
+            monthBudget.value = budgetRepository.getMonthBudget(month).asLiveData()
+        }
     }
 
-    private fun getAllExpenses() {
-        viewModelScope.launch(Dispatchers.Main) {
-            _allExpenses.value = listOf<Triple<LiveData<MutableList<Transaction>>?, LiveData<Int>?, CategoryType>>(
-                Triple(apparelsExpenses, monthBudget, CategoryType.APPARELS),
-                Triple(foodExpenses, monthBudget, CategoryType.FOOD),
-                Triple(housingExpenses, monthBudget, CategoryType.HOUSING),
-                Triple(transitExpenses, monthBudget, CategoryType.TRANSIT),
-                Triple(shoppingExpenses, monthBudget, CategoryType.SHOPPING),
-                Triple(healthExpenses, monthBudget, CategoryType.HEALTH),
-                Triple(leisureExpenses, monthBudget, CategoryType.LEISURE)
+    fun onChangeMonth(button: View) {
+        val months: List<String> =
+            listOf<String>(
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
             )
+        val currentMonth = selectedMonth.value
+        val monthIndex = months.indexOf(currentMonth)
+        if (button.id == R.id.btn_next_month) {
+            if (monthIndex == 11) {
+                _selectedMonth.value = months[0]
+            } else {
+                _selectedMonth.value = months[monthIndex + 1]
+            }
+        } else {
+            if (monthIndex == 0){
+                _selectedMonth.value = months[11]
+            } else {
+                _selectedMonth.value = months[monthIndex - 1]
+            }
         }
     }
 }

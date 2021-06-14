@@ -13,7 +13,7 @@
 
         <variable
             name="monthBudget"
-            type="androidx.lifecycle.LiveData&lt;Integer&gt;" />
+            type="androidx.lifecycle.MediatorLiveData&lt;androidx.lifecycle.LiveData&lt;Integer&gt;&gt;" />
         <variable
             name="categoryType"
             type="com.example.budget.common.CategoryType" />
