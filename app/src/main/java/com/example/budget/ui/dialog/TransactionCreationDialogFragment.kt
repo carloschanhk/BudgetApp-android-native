@@ -57,21 +57,31 @@ class TransactionCreationDialogFragment : BottomSheetDialogFragment() {
     }
 
     fun onConfirm() {
-        val calendar = Calendar.getInstance()
-        datePicker.let {
-            calendar.set(it.year, it.month, it.dayOfMonth)
-        }
-        lifecycleScope.launch(Dispatchers.IO) {
-            budgetRepository.createTransaction(
-                Transaction(
-                    spTransactionCategory.selectedItem.toString(),
-                    calendar.time,
-                    etTransactionCost.text.toString().toFloat(),
-                    etTransactionTitle.text.toString()
+        if (etTransactionCost.text.isNotEmpty() && etTransactionTitle.text.isNotEmpty()) {
+            val calendar = Calendar.getInstance()
+            datePicker.let {
+                calendar.set(it.year, it.month, it.dayOfMonth)
+            }
+            lifecycleScope.launch(Dispatchers.IO) {
+                budgetRepository.createTransaction(
+                    Transaction(
+                        spTransactionCategory.selectedItem.toString(),
+                        calendar.time,
+                        etTransactionCost.text.toString().toFloat(),
+                        etTransactionTitle.text.toString()
+                    )
                 )
-            )
+            }
+            findNavController().navigateUp()
+        } else {
+            if (etTransactionTitle.text.isEmpty()){
+                etTransactionTitle.error = "Please enter the title"
+            }
+            if (etTransactionCost.text.isEmpty()){
+                etTransactionCost.error = "Please enter the cost"
+            }
         }
-        findNavController().navigateUp()
+
     }
 
     fun onCancel() {
