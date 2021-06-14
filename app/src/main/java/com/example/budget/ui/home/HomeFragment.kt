@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.budget.common.CategoryType
 import com.example.budget.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,7 +29,8 @@ class HomeFragment : Fragment() {
         binding?.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = homeViewModel
-            homeBottomSection.rvTransactions.adapter = TransactionItemAdapter()
+            context = activity
+            categoryTypes = CategoryType.values().toList()
         }
     }
 }

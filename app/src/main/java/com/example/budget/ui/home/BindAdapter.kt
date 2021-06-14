@@ -9,21 +9,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.RecyclerView
 import com.example.budget.R
 import com.example.budget.common.CategoryType
 import com.example.budget.data.expense.Transaction
-
-@BindingAdapter("listData")
-fun bindRecyclerView(
-    recyclerView: RecyclerView,
-    data: List<Triple<LiveData<List<Transaction>>, LiveData<Int>, CategoryType>>?
-) {
-    val adapter = recyclerView.adapter as? TransactionItemAdapter
-    adapter?.submitList(data)
-}
-
 //RecyclerView Item
 @SuppressLint("UseCompatLoadingForDrawables")
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

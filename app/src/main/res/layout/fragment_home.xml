@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.example.budget.ui.home.HomeViewModel" />
+
+        <variable
+            name="categoryTypes"
+            type="java.util.List&lt;com.example.budget.common.CategoryType&gt;" />
+
+        <variable
+            name="context"
+            type="android.content.Context" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/main_background"
@@ -92,7 +99,9 @@
             <include
                 android:id="@+id/home_bottom_section"
                 layout="@layout/home_section_transactions"
-                app:viewModel="@{viewModel}" />
+                app:viewModel="@{viewModel}"
+                app:context="@{context}"
+                app:categoryTypes="@{categoryTypes}"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
