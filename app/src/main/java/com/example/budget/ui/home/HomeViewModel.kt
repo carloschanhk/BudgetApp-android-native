@@ -107,6 +107,28 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
             }
         }
 
+    /**
+     * For transaction items
+     * **/
+
+    private val _showTransactions = MutableLiveData<Boolean>(false)
+    val showTransactions: LiveData<Boolean> get() = _showTransactions
+
+    private val _sortByCost = MutableLiveData<Boolean>(true)
+    val sortByCost: LiveData<Boolean> get() = _sortByCost
+
+    val monthTransactions: LiveData<List<Transaction>>
+        get() = Transformations.switchMap(selectedMonth) { selectedMonth ->
+            Transformations.switchMap(sortByCost) { isSortByCost ->
+                Transformations.map(_allTransactions) { allTransactions ->
+                    val monthTransactions = allTransactions.filter { transaction ->
+                        SimpleDateFormat("MMMM").format(transaction.date!!) == selectedMonth
+                    }
+                    monthTransactions.sortedBy { it.cost }.reversed()
+                }
+            }
+        }
+
     init {
         monthBudget.addSource(selectedMonth) { month ->
             monthBudget.value = budgetRepository.getMonthBudget(month).asLiveData()
@@ -144,5 +166,9 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
                 _selectedMonth.value = months[monthIndex - 1]
             }
         }
+    }
+
+    fun onChangeDisplay(button: View) {
+        _showTransactions.value = !showTransactions.value!!
     }
 }

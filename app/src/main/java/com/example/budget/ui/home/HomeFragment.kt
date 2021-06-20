@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-    private var binding: FragmentHomeBinding? = null
+    lateinit var binding: FragmentHomeBinding
     private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
@@ -21,16 +21,27 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding!!.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.apply {
+        binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = homeViewModel
             context = activity
             categoryTypes = CategoryType.values().toList()
+            homeBottomSection.rvTransactions.adapter = TransactionsAdapter()
         }
+
+        homeViewModel.showTransactions.observe(viewLifecycleOwner,{ choice ->
+            if (choice){
+                binding.homeBottomSection.svCategory.visibility = View.GONE
+                binding.homeBottomSection.rvTransactions.visibility = View.VISIBLE
+            } else {
+                binding.homeBottomSection.svCategory.visibility = View.VISIBLE
+                binding.homeBottomSection.rvTransactions.visibility = View.GONE
+            }
+        })
     }
 }

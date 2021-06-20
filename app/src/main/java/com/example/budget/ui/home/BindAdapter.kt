@@ -9,11 +9,14 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.example.budget.R
 import com.example.budget.common.CategoryType
 import com.example.budget.data.expense.Transaction
+import java.text.SimpleDateFormat
+import java.util.*
 
-//RecyclerView Item
+//List Item
 @SuppressLint("UseCompatLoadingForDrawables")
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 @BindingAdapter(value = ["transactions", "context", "monthBudget", "type"], requireAll = true)
@@ -34,9 +37,7 @@ fun bindProgressBar(
         if (budget == 0) {
             view.progress = 0
         } else {
-            Log.d("TRANSACTION", "progress bar: ${view.progress}")
             view.progress = (categoryCost / budget * 100).toInt()
-            Log.d("TRANSACTION", "progress bar: ${view.progress}")
         }
     }
 
@@ -118,5 +119,26 @@ fun bindBudgetToText(textView: TextView, monthBudget: Int) {
         R.string.money_amount,
         (if (monthBudget > 0) monthBudget else 0)
     )
+}
 
+//RecyclerView Item
+@BindingAdapter("listData")
+fun bindRecyclerView(
+    recyclerView: RecyclerView,
+    data: List<Transaction>?
+) {
+    Log.d("ADAPTER", "bindRecyclerView: $data")
+    val adapter = recyclerView.adapter as TransactionsAdapter
+    adapter.submitList(data)
+}
+
+@SuppressLint("SimpleDateFormat", "WeekBasedYear")
+@BindingAdapter("date")
+fun bindDateToText(textView: TextView,date: Date){
+    textView.text = SimpleDateFormat("dd-MMM-YYYY").format(date)
+}
+
+@BindingAdapter("cost")
+fun bindCostToText(textView: TextView, cost: Float){
+    textView.text = textView.resources.getString(R.string.money_amount, cost.toInt())
 }

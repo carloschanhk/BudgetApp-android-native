@@ -1,109 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
-
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
-
         <variable
-            name="context"
-            type="android.content.Context" />
-
-        <variable
-            name="transactions"
-            type="androidx.lifecycle.LiveData&lt;java.util.List&lt;com.example.budget.data.expense.Transaction&gt;&gt;" />
-
-        <variable
-            name="monthBudget"
-            type="androidx.lifecycle.MediatorLiveData&lt;androidx.lifecycle.LiveData&lt;Integer&gt;&gt;" />
-        <variable
-            name="categoryType"
-            type="com.example.budget.common.CategoryType" />
+            name="transaction"
+            type="com.example.budget.data.expense.Transaction" />
     </data>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingVertical="10dp">
 
-        <RelativeLayout
-            android:id="@+id/icon_circular_progressbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="center">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@{categoryType.icon}" />
-
-            <ProgressBar
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                transactions="@{transactions}"
-                context="@{context}"
-                monthBudget="@{monthBudget}"
-                type="@{categoryType}"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerInParent="true"
-                android:max="100"
-                android:progress="0"
-                tools:progressBackgroundTint="@color/grey"
-                tools:progressDrawable="@drawable/progressbar_housing"
-                tools:progressTint="@color/yellow" />
-
-        </RelativeLayout>
-
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_toEndOf="@+id/icon_circular_progressbar"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_transaction_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="@{categoryType.type}"
-                tools:text="Shops" />
-
+                android:fontFamily="sans-serif-black"
+                android:textSize="18sp"
+                android:textColor="@color/color_main_50"
+                tools:text="Shops"
+                android:text="@{transaction.title}"/>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
             <TextView
+                android:id="@+id/tv_transaction_item_cost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:transactions="@{transactions}"
-                app:monthBudget="@{monthBudget}"
-                tools:text="46% of budget" />
+                android:textSize="18sp"
+                android:textColor="@color/color_main_50"
+                android:fontFamily="sans-serif-black"
+                app:cost="@{transaction.cost}"
+                tools:text="$2000"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:orientation="vertical">
+            app:date="@{transaction.date}"
+            tools:text="10 June, 2021"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginBottom="5dp"
-                app:categoryCost="@{transactions}"
-                tools:text="$2,800.00" />
+    </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                app:numOfTransactions="@{transactions}"
-                tools:text="15 transactions" />
-        </LinearLayout>
-
-
-    </RelativeLayout>
 </layout>
