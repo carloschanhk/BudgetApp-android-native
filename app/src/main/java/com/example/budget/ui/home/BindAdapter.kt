@@ -12,6 +12,7 @@ import androidx.databinding.BindingAdapter
 import com.example.budget.R
 import com.example.budget.common.CategoryType
 import com.example.budget.data.expense.Transaction
+
 //RecyclerView Item
 @SuppressLint("UseCompatLoadingForDrawables")
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -106,5 +107,16 @@ fun bindMonthBudgetPercentage(textView: TextView, totalExpenses: Int, monthBudge
 fun bindBudgetToProgressBar(progressBar: ProgressBar, totalExpenses: Int, monthBudget: Int) {
     if (monthBudget > 0) {
         progressBar.progress = totalExpenses * 100 / monthBudget
+    } else {
+        progressBar.progress = 0
     }
+}
+
+@BindingAdapter("monthBudget")
+fun bindBudgetToText(textView: TextView, monthBudget: Int) {
+    textView.text = textView.resources.getString(
+        R.string.money_amount,
+        (if (monthBudget > 0) monthBudget else 0)
+    )
+
 }
