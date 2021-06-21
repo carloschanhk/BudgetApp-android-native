@@ -169,6 +169,6 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
     }
 
     fun onChangeDisplay(button: View) {
-        _showTransactions.value = !showTransactions.value!!
+        _showTransactions.value = button.id == R.id.btn_transactions
     }
 }
