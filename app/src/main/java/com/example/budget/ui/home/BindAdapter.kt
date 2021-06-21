@@ -127,7 +127,6 @@ fun bindRecyclerView(
     recyclerView: RecyclerView,
     data: List<Transaction>?
 ) {
-    Log.d("ADAPTER", "bindRecyclerView: $data")
     val adapter = recyclerView.adapter as TransactionsAdapter
     adapter.submitList(data)
 }

@@ -1,6 +1,5 @@
 package com.example.budget.ui.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -33,7 +32,6 @@ class TransactionsAdapter :
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val transaction = getItem(position)
-        Log.d("ADAPTER", "onBindViewHolder: $transaction")
         holder.bind(transaction)
     }
 

@@ -124,7 +124,7 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
                     val monthTransactions = allTransactions.filter { transaction ->
                         SimpleDateFormat("MMMM").format(transaction.date!!) == selectedMonth
                     }
-                    monthTransactions.sortedBy { it.cost }.reversed()
+                    if (isSortByCost) monthTransactions.sortedByDescending { it.cost } else monthTransactions.sortedByDescending { it.date }
                 }
             }
         }
@@ -170,5 +170,9 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
 
     fun onChangeDisplay(button: View) {
         _showTransactions.value = button.id == R.id.btn_transactions
+    }
+
+    fun onChangeSortBy(id: Int) {
+        _sortByCost.value = id == R.id.action_sort_by_cost
     }
 }
