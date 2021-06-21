@@ -3,7 +3,6 @@ package com.example.budget.ui.home
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -140,4 +139,15 @@ fun bindDateToText(textView: TextView,date: Date){
 @BindingAdapter("cost")
 fun bindCostToText(textView: TextView, cost: Float){
     textView.text = textView.resources.getString(R.string.money_amount, cost.toInt())
+}
+
+@BindingAdapter("category")
+fun bindCatToImage(imageView: ImageView, category: String){
+    var categoryType: CategoryType? = null
+    for (type in CategoryType.values()){
+        if (type.type == category) {
+            categoryType = type
+        }
+    }
+    categoryType?.let { imageView.setImageResource(it.icon) }
 }
