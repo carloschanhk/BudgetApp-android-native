@@ -3,14 +3,15 @@ package com.example.budget.ui.home
 import android.graphics.Paint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budget.R
@@ -21,13 +22,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
-    private val homeViewModel: HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,18 +35,21 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("Testing", "fragment: $homeViewModel")
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = homeViewModel
             context = activity
             categoryTypes = CategoryType.values().toList()
-            homeBottomSection.rvTransactions.adapter = TransactionsAdapter()
-            homeBottomSection.rvTransactions.addItemDecoration(
-                DividerItemDecoration(
-                    activity,
-                    LinearLayoutManager.VERTICAL
+            homeBottomSection.rvTransactions.apply {
+                adapter = TransactionsAdapter(homeViewModel, findNavController())
+                addItemDecoration(
+                    DividerItemDecoration(
+                        activity,
+                        LinearLayoutManager.VERTICAL
+                    )
                 )
-            )
+            }
         }
 
         homeViewModel.showTransactions.observe(viewLifecycleOwner, { choice ->

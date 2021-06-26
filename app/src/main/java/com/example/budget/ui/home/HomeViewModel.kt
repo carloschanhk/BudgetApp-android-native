@@ -3,10 +3,13 @@ package com.example.budget.ui.home
 import android.annotation.SuppressLint
 import android.view.View
 import androidx.lifecycle.*
+import androidx.navigation.NavController
 import com.example.budget.R
 import com.example.budget.data.expense.Transaction
 import com.example.budget.repository.BudgetRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -174,5 +177,31 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
 
     fun onChangeSortBy(id: Int) {
         _sortByCost.value = id == R.id.action_sort_by_cost
+    }
+
+    fun createTransaction(transaction: Transaction){
+        viewModelScope.launch(Dispatchers.IO) {
+            budgetRepository.createTransaction(transaction)
+        }
+    }
+
+    fun removeTransaction(transaction: Transaction) {
+        viewModelScope.launch(Dispatchers.IO) {
+            budgetRepository.removeTransaction(transaction)
+        }
+    }
+
+    /**
+     * For editing transaction
+     * **/
+    var targetedTransaction: Transaction? = null
+    fun editTransaction(transaction: Transaction, navController: NavController){
+        targetedTransaction = transaction
+        navController.navigate(R.id.action_FirstFragment_to_transactionCreationDialogFragment)
+    }
+    fun updateTransaction(transaction: Transaction){
+        viewModelScope.launch(Dispatchers.IO) {
+            budgetRepository.updateTransaction(transaction)
+        }
     }
 }
