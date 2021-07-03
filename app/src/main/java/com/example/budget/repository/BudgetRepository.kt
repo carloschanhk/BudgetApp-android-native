@@ -25,6 +25,14 @@ class BudgetRepository @Inject constructor(private val expenseDao: ExpenseDao, p
     }
 
     suspend fun setBudget(monthBudget: MonthBudget){
-        return budgetDao.setMonthBudget(monthBudget)
+        budgetDao.setMonthBudget(monthBudget)
+    }
+
+    suspend fun removeTransaction(transaction: Transaction){
+        expenseDao.deleteTransaction(transaction)
+    }
+
+    suspend fun updateTransaction(transaction: Transaction){
+        expenseDao.updateTransaction(transaction)
     }
 }

@@ -1,56 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="viewModel"
             type="com.example.budget.ui.home.HomeViewModel" />
+
+        <variable
+            name="categoryTypes"
+            type="java.util.List&lt;com.example.budget.common.CategoryType&gt;" />
+
+        <variable
+            name="context"
+            type="android.content.Context" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@drawable/home_box_background_white">
+        android:background="@drawable/home_box_background_white"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="30dp"
+            android:layout_marginHorizontal="@dimen/horizontal_margin"
             android:orientation="horizontal"
-            android:layout_marginHorizontal="@dimen/horizontal_margin">
-            <TextView
-                android:id="@+id/tv_title_expenses"
+            android:paddingVertical="30dp">
+
+            <Button
+                android:id="@+id/btn_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="50dp"
-                tools:text="Expenses"
-                android:text="Expenses"
-                android:textSize="18sp"/>
-            <TextView
-                android:id="@+id/tv_title_incomes"
+                android:background="@color/transparent"
+                android:paddingStart="0dp"
+                android:onClick="@{(view)->viewModel.onChangeDisplay(view)}"
+                android:text="Category"
+                android:textColor="@color/color_main"
+                android:textSize="16sp"
+                tools:text="Category" />
+
+            <Button
+                android:id="@+id/btn_transactions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:onClick="@{(view)->viewModel.onChangeDisplay(view)}"
+                android:text="Transaction"
+                android:textColor="@color/color_main"
+                android:textSize="16sp"
+                tools:text="Transaction" />
+
+            <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                tools:text="Incomes"
-                android:text="Incomes"
-                android:textSize="18sp"/>
+                android:layout_weight="1" />
+
             <ImageButton
+                android:id="@+id/btn_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_sort_24"
-                android:background="@color/transparent"/>
+                android:layout_gravity="center"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_baseline_sort_24" />
 
         </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/sv_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:orientation="vertical">
+
+                <include
+                    layout="@layout/home_item_category"
+                    app:categoryType="@{categoryTypes[0]}"
+                    app:context="@{context}"
+                    app:monthBudget="@{viewModel.monthBudget}"
+                    app:transactions="@{viewModel.apparelsExpenses}" />
+
+                <include
+                    layout="@layout/home_item_category"
+                    app:categoryType="@{categoryTypes[1]}"
+                    app:context="@{context}"
+                    app:monthBudget="@{viewModel.monthBudget}"
+                    app:transactions="@{viewModel.foodExpenses}" />
+
+                <include
+                    layout="@layout/home_item_category"
+                    app:categoryType="@{categoryTypes[2]}"
+                    app:context="@{context}"
+                    app:monthBudget="@{viewModel.monthBudget}"
+                    app:transactions="@{viewModel.shoppingExpenses}" />
+
+                <include
+                    layout="@layout/home_item_category"
+                    app:categoryType="@{categoryTypes[3]}"
+                    app:context="@{context}"
+                    app:monthBudget="@{viewModel.monthBudget}"
+                    app:transactions="@{viewModel.transitExpenses}" />
+
+                <include
+                    layout="@layout/home_item_category"
+                    app:categoryType="@{categoryTypes[4]}"
+                    app:context="@{context}"
+                    app:monthBudget="@{viewModel.monthBudget}"
+                    app:transactions="@{viewModel.leisureExpenses}" />
+
+                <include
+                    layout="@layout/home_item_category"
+                    app:categoryType="@{categoryTypes[5]}"
+                    app:context="@{context}"
+                    app:monthBudget="@{viewModel.monthBudget}"
+                    app:transactions="@{viewModel.healthExpenses}" />
+
+                <include
+                    layout="@layout/home_item_category"
+                    app:categoryType="@{categoryTypes[6]}"
+                    app:context="@{context}"
+                    app:monthBudget="@{viewModel.monthBudget}"
+                    app:transactions="@{viewModel.housingExpenses}" />
+
+            </LinearLayout>
+        </ScrollView>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_transactions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/horizontal_margin"
             android:scrollbars="none"
-            tools:listitem="@layout/home_item_transaction"
-            app:listData="@{viewModel.allExpenses}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            />
+            app:listData="@{viewModel.monthTransactions}"
+            tools:listitem="@layout/home_item_transaction" />
+
+
     </LinearLayout>
 </layout>

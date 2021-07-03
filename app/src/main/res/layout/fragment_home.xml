@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.example.budget.ui.home.HomeViewModel" />
+
+        <variable
+            name="categoryTypes"
+            type="java.util.List&lt;com.example.budget.common.CategoryType&gt;" />
+
+        <variable
+            name="context"
+            type="android.content.Context" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/main_background"
@@ -22,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:fontFamily="@font/antic_slab"
-            android:text="TextView"
+            android:text="@{viewModel.selectedMonth}"
             android:textColor="@color/white"
             android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:fontFamily="sans-serif-black"
-            android:text="TextView"
+            android:text="@{@string/money_amount(viewModel.totalExpenses)}"
             android:textColor="@color/white"
             android:textSize="45sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,23 +52,25 @@
             tools:text="$5,650" />
 
         <ImageButton
-            android:id="@+id/btn_left"
+            android:id="@+id/btn_previous_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_baseline_chevron_left_30"
+            android:src="@drawable/ic_baseline_chevron_left_48"
+            android:onClick="@{(view)->viewModel.onChangeMonth(view)}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_home_balance"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_home_month" />
 
         <ImageButton
-            android:id="@+id/btn_right"
+            android:id="@+id/btn_next_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_baseline_chevron_right_30"
+            android:src="@drawable/ic_baseline_chevron_right_48"
+            android:onClick="@{(view)->viewModel.onChangeMonth(view)}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_home_balance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_home_month" />
@@ -92,7 +101,9 @@
             <include
                 android:id="@+id/home_bottom_section"
                 layout="@layout/home_section_transactions"
-                app:viewModel="@{viewModel}" />
+                app:viewModel="@{viewModel}"
+                app:context="@{context}"
+                app:categoryTypes="@{categoryTypes}"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

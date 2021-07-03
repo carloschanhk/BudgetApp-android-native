@@ -3,28 +3,19 @@ package com.example.budget.ui.home
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budget.R
 import com.example.budget.common.CategoryType
 import com.example.budget.data.expense.Transaction
+import java.text.SimpleDateFormat
+import java.util.*
 
-@BindingAdapter("listData")
-fun bindRecyclerView(
-    recyclerView: RecyclerView,
-    data: List<Triple<LiveData<List<Transaction>>, LiveData<Int>, CategoryType>>?
-) {
-    val adapter = recyclerView.adapter as? TransactionItemAdapter
-    adapter?.submitList(data)
-}
-
-//RecyclerView Item
+//List Item
 @SuppressLint("UseCompatLoadingForDrawables")
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 @BindingAdapter(value = ["transactions", "context", "monthBudget", "type"], requireAll = true)
@@ -45,9 +36,7 @@ fun bindProgressBar(
         if (budget == 0) {
             view.progress = 0
         } else {
-            Log.d("TRANSACTION", "progress bar: ${view.progress}")
             view.progress = (categoryCost / budget * 100).toInt()
-            Log.d("TRANSACTION", "progress bar: ${view.progress}")
         }
     }
 
@@ -118,5 +107,47 @@ fun bindMonthBudgetPercentage(textView: TextView, totalExpenses: Int, monthBudge
 fun bindBudgetToProgressBar(progressBar: ProgressBar, totalExpenses: Int, monthBudget: Int) {
     if (monthBudget > 0) {
         progressBar.progress = totalExpenses * 100 / monthBudget
+    } else {
+        progressBar.progress = 0
     }
+}
+
+@BindingAdapter("monthBudget")
+fun bindBudgetToText(textView: TextView, monthBudget: Int) {
+    textView.text = textView.resources.getString(
+        R.string.money_amount,
+        (if (monthBudget > 0) monthBudget else 0)
+    )
+}
+
+//RecyclerView Item
+@BindingAdapter("listData")
+fun bindRecyclerView(
+    recyclerView: RecyclerView,
+    data: List<Transaction>?
+) {
+    val adapter = recyclerView.adapter as TransactionsAdapter
+    adapter.submitList(data)
+}
+
+@SuppressLint("SimpleDateFormat", "WeekBasedYear")
+@BindingAdapter("date")
+fun bindDateToText(textView: TextView, date: Date) {
+    textView.text = SimpleDateFormat("dd-MMM-YYYY").format(date)
+}
+
+@BindingAdapter("cost")
+fun bindCostToText(textView: TextView, cost: Float) {
+    textView.text = textView.resources.getString(R.string.money_amount, cost.toInt())
+}
+
+@BindingAdapter("category")
+fun bindCatToImage(imageView: ImageView, category: String) {
+    var categoryType: CategoryType? = null
+    for (type in CategoryType.values()) {
+        if (type.type == category) {
+            categoryType = type
+        }
+    }
+    categoryType?.let { imageView.setImageResource(it.icon) }
 }

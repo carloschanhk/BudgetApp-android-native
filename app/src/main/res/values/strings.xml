@@ -9,11 +9,11 @@
     <string-array name="categories">
         <item>Apparels</item>
         <item>Food</item>
-        <item>Housing</item>
-        <item>Transit</item>
         <item>Shopping</item>
-        <item>Health</item>
+        <item>Transit</item>
         <item>Leisure</item>
+        <item>Health</item>
+        <item>Housing</item>
     </string-array>
     <string-array name="months">
         <item>January</item>

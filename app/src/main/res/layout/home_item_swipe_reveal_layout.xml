@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="transaction"
+            type="com.example.budget.data.expense.Transaction" />
+    </data>
+
+    <com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dragEdge="right"
+        app:mode="same_level"
+        android:id="@+id/swipe_reveal_layout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/red"
+                android:id="@+id/btn_remove"
+                android:text="Remove"
+                tools:targetApi="lollipop" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/cardview_dark_background"
+                android:id="@+id/btn_edit"
+                android:text="Edit"
+                tools:targetApi="lollipop" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingVertical="10dp">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="15dp"
+                app:category="@{transaction.category}"
+                tools:src="@drawable/ic_baseline_shopping_cart_24" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_transaction_item_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@{transaction.title}"
+                    android:textColor="@color/color_main_50"
+                    android:textSize="18sp"
+                    tools:text="Shops" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:date="@{transaction.date}"
+                    tools:text="10 June, 2021" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_transaction_item_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:textColor="@color/color_main_50"
+                android:textSize="18sp"
+                app:cost="@{transaction.cost}"
+                tools:text="$2000" />
+
+        </LinearLayout>
+
+
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+</layout>
