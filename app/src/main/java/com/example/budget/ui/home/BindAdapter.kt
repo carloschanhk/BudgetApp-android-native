@@ -132,19 +132,19 @@ fun bindRecyclerView(
 
 @SuppressLint("SimpleDateFormat", "WeekBasedYear")
 @BindingAdapter("date")
-fun bindDateToText(textView: TextView,date: Date){
+fun bindDateToText(textView: TextView, date: Date) {
     textView.text = SimpleDateFormat("dd-MMM-YYYY").format(date)
 }
 
 @BindingAdapter("cost")
-fun bindCostToText(textView: TextView, cost: Float){
+fun bindCostToText(textView: TextView, cost: Float) {
     textView.text = textView.resources.getString(R.string.money_amount, cost.toInt())
 }
 
 @BindingAdapter("category")
-fun bindCatToImage(imageView: ImageView, category: String){
+fun bindCatToImage(imageView: ImageView, category: String) {
     var categoryType: CategoryType? = null
-    for (type in CategoryType.values()){
+    for (type in CategoryType.values()) {
         if (type.type == category) {
             categoryType = type
         }

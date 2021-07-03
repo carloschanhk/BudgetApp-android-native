@@ -11,6 +11,7 @@ import android.widget.Spinner
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.budget.R
 import com.example.budget.data.expense.Transaction
 import com.example.budget.databinding.DialogAddTransactionBinding
@@ -32,13 +33,14 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
     lateinit var spTransactionCategory: Spinner
     lateinit var datePicker: DatePicker
     var targetedTransaction: Transaction? = null
-    val calendar = Calendar.getInstance()
+    private val calendar = Calendar.getInstance()
+    private lateinit var listAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DialogAddTransactionBinding.inflate(inflater, container, false)
         return binding!!.root
     }
@@ -50,6 +52,7 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
         etTransactionTitle = view.findViewById(R.id.et_transaction_title)
         spTransactionCategory = view.findViewById(R.id.spinner_set_category)
         datePicker = view.findViewById(R.id.date_picker)
+        listAdapter = activity?.findViewById<RecyclerView>(R.id.rv_transactions)?.adapter as RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         binding?.apply {
             fragment = this@TransactionCreationDialogFragment
@@ -68,6 +71,11 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
                 resources.getStringArray(R.array.categories).indexOf(it.category)
             )
         }
+    }
+
+    override fun dismiss() {
+        super.dismiss()
+        homeViewModel.targetedTransaction = null
     }
 
     fun onConfirm() {
@@ -95,7 +103,7 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
                     )
                 )
             }
-
+            listAdapter.notifyDataSetChanged()
             findNavController().navigateUp()
         } else {
             if (etTransactionTitle.text.isEmpty()) {

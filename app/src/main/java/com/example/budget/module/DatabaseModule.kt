@@ -33,6 +33,6 @@ object DatabaseModule {
             appContext,
             AppDatabase::class.java,
             "Budget"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 }

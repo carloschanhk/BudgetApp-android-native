@@ -3,7 +3,6 @@ package com.example.budget.ui.home
 import android.annotation.SuppressLint
 import android.view.View
 import androidx.lifecycle.*
-import androidx.navigation.NavController
 import com.example.budget.R
 import com.example.budget.data.expense.Transaction
 import com.example.budget.repository.BudgetRepository
@@ -179,7 +178,7 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
         _sortByCost.value = id == R.id.action_sort_by_cost
     }
 
-    fun createTransaction(transaction: Transaction){
+    fun createTransaction(transaction: Transaction) {
         viewModelScope.launch(Dispatchers.IO) {
             budgetRepository.createTransaction(transaction)
         }
@@ -194,12 +193,13 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
     /**
      * For editing transaction
      * **/
+
     var targetedTransaction: Transaction? = null
-    fun editTransaction(transaction: Transaction, navController: NavController){
+    fun editTransaction(transaction: Transaction) {
         targetedTransaction = transaction
-        navController.navigate(R.id.action_FirstFragment_to_transactionCreationDialogFragment)
     }
-    fun updateTransaction(transaction: Transaction){
+
+    fun updateTransaction(transaction: Transaction) {
         viewModelScope.launch(Dispatchers.IO) {
             budgetRepository.updateTransaction(transaction)
         }
