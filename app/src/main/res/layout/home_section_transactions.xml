@@ -36,8 +36,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
-                android:paddingStart="0dp"
                 android:onClick="@{(view)->viewModel.onChangeDisplay(view)}"
+                android:paddingStart="0dp"
                 android:text="Category"
                 android:textColor="@color/color_main"
                 android:textSize="16sp"
@@ -69,68 +69,15 @@
 
         </LinearLayout>
 
-        <ScrollView
-            android:id="@+id/sv_category"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_category"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/horizontal_margin"
-                android:orientation="vertical">
-
-                <include
-                    layout="@layout/home_item_category"
-                    app:categoryType="@{categoryTypes[0]}"
-                    app:context="@{context}"
-                    app:monthBudget="@{viewModel.monthBudget}"
-                    app:transactions="@{viewModel.apparelsExpenses}" />
-
-                <include
-                    layout="@layout/home_item_category"
-                    app:categoryType="@{categoryTypes[1]}"
-                    app:context="@{context}"
-                    app:monthBudget="@{viewModel.monthBudget}"
-                    app:transactions="@{viewModel.foodExpenses}" />
-
-                <include
-                    layout="@layout/home_item_category"
-                    app:categoryType="@{categoryTypes[2]}"
-                    app:context="@{context}"
-                    app:monthBudget="@{viewModel.monthBudget}"
-                    app:transactions="@{viewModel.shoppingExpenses}" />
-
-                <include
-                    layout="@layout/home_item_category"
-                    app:categoryType="@{categoryTypes[3]}"
-                    app:context="@{context}"
-                    app:monthBudget="@{viewModel.monthBudget}"
-                    app:transactions="@{viewModel.transitExpenses}" />
-
-                <include
-                    layout="@layout/home_item_category"
-                    app:categoryType="@{categoryTypes[4]}"
-                    app:context="@{context}"
-                    app:monthBudget="@{viewModel.monthBudget}"
-                    app:transactions="@{viewModel.leisureExpenses}" />
-
-                <include
-                    layout="@layout/home_item_category"
-                    app:categoryType="@{categoryTypes[5]}"
-                    app:context="@{context}"
-                    app:monthBudget="@{viewModel.monthBudget}"
-                    app:transactions="@{viewModel.healthExpenses}" />
-
-                <include
-                    layout="@layout/home_item_category"
-                    app:categoryType="@{categoryTypes[6]}"
-                    app:context="@{context}"
-                    app:monthBudget="@{viewModel.monthBudget}"
-                    app:transactions="@{viewModel.housingExpenses}" />
-
-            </LinearLayout>
-        </ScrollView>
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_margin"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:listData="@{viewModel.allCategory}"
+            tools:listitem="@layout/home_item_category" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_transactions"
@@ -140,7 +87,7 @@
             android:scrollbars="none"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:listData="@{viewModel.monthTransactions}"
-            tools:listitem="@layout/home_item_transaction" />
+            tools:listitem="@layout/home_item_swipe_reveal_layout" />
 
 
     </LinearLayout>

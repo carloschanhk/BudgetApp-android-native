@@ -16,7 +16,9 @@ import com.example.budget.R
 import com.example.budget.data.expense.Transaction
 import com.example.budget.databinding.DialogAddTransactionBinding
 import com.example.budget.repository.BudgetRepository
+import com.example.budget.ui.home.CategoryAdapter
 import com.example.budget.ui.home.HomeViewModel
+import com.example.budget.ui.home.TransactionsAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -34,7 +36,9 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
     lateinit var datePicker: DatePicker
     var targetedTransaction: Transaction? = null
     private val calendar = Calendar.getInstance()
-    private lateinit var listAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
+    private lateinit var transactionsAdapter: TransactionsAdapter
+    private lateinit var categoryAdapter: CategoryAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +56,8 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
         etTransactionTitle = view.findViewById(R.id.et_transaction_title)
         spTransactionCategory = view.findViewById(R.id.spinner_set_category)
         datePicker = view.findViewById(R.id.date_picker)
-        listAdapter = activity?.findViewById<RecyclerView>(R.id.rv_transactions)?.adapter as RecyclerView.Adapter<RecyclerView.ViewHolder>
+        transactionsAdapter = activity?.findViewById<RecyclerView>(R.id.rv_transactions)?.adapter as TransactionsAdapter
+        categoryAdapter = activity?.findViewById<RecyclerView>(R.id.rv_category)?.adapter as CategoryAdapter
 
         binding?.apply {
             fragment = this@TransactionCreationDialogFragment
@@ -103,7 +108,8 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
                     )
                 )
             }
-            listAdapter.notifyDataSetChanged()
+            transactionsAdapter.notifyDataSetChanged()
+            categoryAdapter.notifyDataSetChanged()
             findNavController().navigateUp()
         } else {
             if (etTransactionTitle.text.isEmpty()) {

@@ -3,7 +3,6 @@ package com.example.budget.ui.home
 import android.graphics.Paint
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +34,6 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("Testing", "fragment: $homeViewModel")
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = homeViewModel
@@ -50,12 +48,21 @@ class HomeFragment : Fragment() {
                     )
                 )
             }
+            homeBottomSection.rvCategory.apply {
+                adapter = CategoryAdapter(context, homeViewModel)
+                addItemDecoration(
+                    DividerItemDecoration(
+                        activity,
+                        LinearLayoutManager.VERTICAL
+                    )
+                )
+            }
         }
 
         homeViewModel.showTransactions.observe(viewLifecycleOwner, { choice ->
             if (choice) {
                 binding.homeBottomSection.apply {
-                    svCategory.visibility = View.GONE
+                    rvCategory.visibility = View.GONE
                     rvTransactions.visibility = View.VISIBLE
                     btnSort.visibility = View.VISIBLE
                     btnCategory.paintFlags =
@@ -64,7 +71,7 @@ class HomeFragment : Fragment() {
                 }
             } else {
                 binding.homeBottomSection.apply {
-                    svCategory.visibility = View.VISIBLE
+                    rvCategory.visibility = View.VISIBLE
                     rvTransactions.visibility = View.GONE
                     btnSort.visibility = View.GONE
                     btnCategory.paintFlags = Paint.UNDERLINE_TEXT_FLAG

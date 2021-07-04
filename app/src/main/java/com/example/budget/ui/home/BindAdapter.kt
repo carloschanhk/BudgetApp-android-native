@@ -15,7 +15,16 @@ import com.example.budget.data.expense.Transaction
 import java.text.SimpleDateFormat
 import java.util.*
 
-//List Item
+//Category RV
+@BindingAdapter("listData")
+fun bindRecyclerViewData(
+    recyclerView: RecyclerView,
+    data: List<Pair<CategoryType, List<Transaction>?>>?
+) {
+    val adapter = recyclerView.adapter as CategoryAdapter
+    adapter.submitList(data)
+}
+
 @SuppressLint("UseCompatLoadingForDrawables")
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 @BindingAdapter(value = ["transactions", "context", "monthBudget", "type"], requireAll = true)

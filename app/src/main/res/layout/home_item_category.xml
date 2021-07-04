@@ -8,11 +8,11 @@
 
         <variable
             name="transactions"
-            type="androidx.lifecycle.LiveData&lt;java.util.List&lt;com.example.budget.data.expense.Transaction&gt;&gt;" />
+            type="java.util.List&lt;com.example.budget.data.expense.Transaction&gt;" />
 
         <variable
-            name="monthBudget"
-            type="androidx.lifecycle.MediatorLiveData&lt;androidx.lifecycle.LiveData&lt;Integer&gt;&gt;" />
+            name="viewModel"
+            type="com.example.budget.ui.home.HomeViewModel" />
         <variable
             name="categoryType"
             type="com.example.budget.common.CategoryType" />
@@ -42,7 +42,7 @@
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 transactions="@{transactions}"
                 context="@{context}"
-                monthBudget="@{monthBudget}"
+                monthBudget="@{viewModel.monthBudget}"
                 type="@{categoryType}"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:transactions="@{transactions}"
-                app:monthBudget="@{monthBudget}"
+                app:monthBudget="@{viewModel.monthBudget}"
                 tools:text="46% of budget" />
         </LinearLayout>
 
