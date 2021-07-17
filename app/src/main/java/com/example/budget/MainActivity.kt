@@ -30,11 +30,11 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_set_month_budget -> {
-                navController.navigate(R.id.action_FirstFragment_to_setBudgetDialogFragment)
+                navController.navigate(R.id.action_HomeFragment_to_setBudgetDialogFragment)
                 true
             }
             R.id.action_add_expense -> {
-                navController.navigate(R.id.action_FirstFragment_to_transactionCreationDialogFragment)
+                navController.navigate(R.id.action_HomeFragment_to_transactionCreationDialogFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)

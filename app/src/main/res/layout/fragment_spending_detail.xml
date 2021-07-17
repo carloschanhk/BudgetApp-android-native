@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data></data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.SpendingDetails.SpendingDetailsFragment">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/Base.Widget.AppCompat.ProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/spending_detail_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_spending_details_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:layout_marginTop="40dp"
+                android:fontFamily="sans-serif-black"
+                android:textColor="@color/white"
+                android:textSize="45sp"
+                tools:text="$2,800" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinner_set_timeframe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:entries="@array/timeframe" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/spending_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="370dp"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <include layout="@layout/spending_detail_bottom_section" />
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

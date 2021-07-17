@@ -29,6 +29,10 @@
         <item>November</item>
         <item>December</item>
     </string-array>
+    <string-array name="timeframe">
+        <item>Last 7 Days</item>
+        <item>Last 30 Days</item>
+    </string-array>
     <string name="money_amount">$%d</string>
     <string name="transaction">%d transaction</string>
     <string name="budget_percentage">%d%%  of budget </string>

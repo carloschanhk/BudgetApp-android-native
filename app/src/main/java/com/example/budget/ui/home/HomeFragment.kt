@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
                 )
             }
             homeBottomSection.rvCategory.apply {
-                adapter = CategoryAdapter(context, homeViewModel)
+                adapter = CategoryAdapter(context, homeViewModel, findNavController())
                 addItemDecoration(
                     DividerItemDecoration(
                         activity,

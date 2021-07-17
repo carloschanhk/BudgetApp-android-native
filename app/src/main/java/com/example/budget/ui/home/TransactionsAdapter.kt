@@ -42,7 +42,7 @@ class TransactionsAdapter(
             binding.btnEdit.setOnClickListener {
                 homeViewModel.editTransaction(transaction)
                 viewBinderHelper.closeLayout(transaction.transactionId.toString())
-                navController.navigate(R.id.action_FirstFragment_to_transactionCreationDialogFragment)
+                navController.navigate(R.id.action_HomeFragment_to_transactionCreationDialogFragment)
             }
             binding.btnRemove.setOnClickListener {
                 homeViewModel.removeTransaction(transaction)

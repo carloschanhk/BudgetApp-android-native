@@ -2,6 +2,7 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="context"
             type="android.content.Context" />
@@ -13,6 +14,7 @@
         <variable
             name="viewModel"
             type="com.example.budget.ui.home.HomeViewModel" />
+
         <variable
             name="categoryType"
             type="com.example.budget.common.CategoryType" />
@@ -20,6 +22,7 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/category_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -40,9 +43,9 @@
 
             <ProgressBar
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                transactions="@{transactions}"
                 context="@{context}"
                 monthBudget="@{viewModel.monthBudget}"
+                transactions="@{transactions}"
                 type="@{categoryType}"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -74,8 +77,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:transactions="@{transactions}"
                 app:monthBudget="@{viewModel.monthBudget}"
+                app:transactions="@{transactions}"
                 tools:text="46% of budget" />
         </LinearLayout>
 
