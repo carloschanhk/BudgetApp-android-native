@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.budget.ui.home.HomeViewModel" />
@@ -43,12 +44,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:fontFamily="sans-serif-black"
-            android:text="@{@string/money_amount(viewModel.totalExpenses)}"
             android:textColor="@color/white"
             android:textSize="45sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_home_month"
+            app:total_expense_to_text="@{viewModel.totalExpenses}"
             tools:text="$5,650" />
 
         <ImageButton
@@ -57,8 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_baseline_chevron_left_48"
             android:onClick="@{(view)->viewModel.onChangeMonth(view)}"
+            android:src="@drawable/ic_baseline_chevron_left_48"
             app:layout_constraintBottom_toBottomOf="@+id/tv_home_balance"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_home_month" />
@@ -69,8 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_baseline_chevron_right_48"
             android:onClick="@{(view)->viewModel.onChangeMonth(view)}"
+            android:src="@drawable/ic_baseline_chevron_right_48"
             app:layout_constraintBottom_toBottomOf="@+id/tv_home_balance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_home_month" />
@@ -101,9 +102,9 @@
             <include
                 android:id="@+id/home_bottom_section"
                 layout="@layout/home_section_transactions"
-                app:viewModel="@{viewModel}"
+                app:categoryTypes="@{categoryTypes}"
                 app:context="@{context}"
-                app:categoryTypes="@{categoryTypes}"/>
+                app:viewModel="@{viewModel}" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

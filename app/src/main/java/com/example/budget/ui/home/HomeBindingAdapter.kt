@@ -160,3 +160,12 @@ fun bindCatToImage(imageView: ImageView, category: String) {
     }
     categoryType?.let { imageView.setImageResource(it.icon) }
 }
+
+@BindingAdapter("total_expense_to_text")
+fun bindTotalExpensesToText(textView: TextView, expenses: Int?){
+    if (expenses != null){
+        textView.text = textView.resources.getString(R.string.money_amount, expenses)
+    } else {
+        textView.text = textView.resources.getString(R.string.money_amount, 0)
+    }
+}
