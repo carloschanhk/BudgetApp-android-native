@@ -1,4 +1,4 @@
-package com.example.budget.ui.SpendingDetails
+package com.example.budget.ui.spending_details
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -6,7 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.example.budget.data.expense.Transaction
 import com.example.budget.repository.BudgetRepository
-import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.BarEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,9 +27,10 @@ class SpendingDetailsViewModel @Inject constructor(val budgetRepository: BudgetR
     val isLoading: LiveData<Boolean> get() = _isLoading
     lateinit var allExpenses: List<Transaction>
 
-    fun getAllExpenses(category: String){
+    fun getAllExpenses(category: String) {
         viewModelScope.launch(Dispatchers.IO) {
             allExpenses = budgetRepository.getTransactions(category)
+            _filteredTransaction.postValue(allExpenses)
             _isLoading.postValue(false)
         }
     }
@@ -69,35 +70,28 @@ class SpendingDetailsViewModel @Inject constructor(val budgetRepository: BudgetR
 //            }
 //        }
 
-    private val _allExpenses = budgetRepository.getAllTransactions().asLiveData()
-//    val yAxisValues: LiveData<MutableList<Transaction>>
-//        get() =
-//            Transformations.switchMap(selectedTimeFrame) { timeFrame ->
-//                Transformations.switchMap(selectedCategory) { categoryType ->
-//                    Transformations.map(_allExpenses) { list ->
-//                        var categoryFiltered = list
-//                        categoryType?.let { category ->
-//                            categoryFiltered =
-//                                list.filter { it.category == category.type }.toMutableList()
-//                        }
-////                        when (timeFrame) {
-////                            "Week" -> categoryFiltered.filter {
-////                                val transactionDate =
-////                                    it.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-////                                var flag = false
-////                                for (day in getTimeframeDays()) {
-////                                    if (day.year == transactionDate.year && day.dayOfYear == transactionDate.dayOfYear) {
-////                                        flag = true
-////                                    }
-////                                }
-////                                flag
-////                            }.toMutableList()
-////                            else -> categoryFiltered
-////                        }
-//                        categoryFiltered
-//                    }
-//                }
-//            }
+    private val _filteredTransaction = MutableLiveData<List<Transaction>>(listOf())
+    val filteredTransaction: LiveData<List<Transaction>>
+        get() = Transformations.switchMap(_filteredTransaction) { transactions ->
+            Transformations.map(selectedTimeFrame) { timeframe ->
+                val dates = getTimeframeDays(timeframe).map { it.dayOfYear }
+                transactions.filter {
+                    dates.indexOf(
+                        it.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().dayOfYear
+                    ) != -1
+                }
+            }
+        }
+
+
+    val categoryExpenses: LiveData<Int>
+        get() =
+            Transformations.map(filteredTransaction)
+            { transactions ->
+                var sum = 0F
+                transactions.forEach { sum += it.cost }
+                sum.toInt()
+            }
 
     fun getTimeframeDays(timeframe: String): List<LocalDate> {
         val calendar = Calendar.getInstance()
@@ -116,9 +110,9 @@ class SpendingDetailsViewModel @Inject constructor(val budgetRepository: BudgetR
         return dates.toList().sorted()
     }
 
-    fun getYAxisData(timeframe: String): MutableList<Entry> {
+    fun getYAxisData(timeframe: String): MutableList<BarEntry> {
         val dates = getTimeframeDays(timeframe)
-        val dataset = mutableListOf<Entry>()
+        val dataset = mutableListOf<BarEntry>()
         var entryDay = 0F
         for (date in dates) {
             var dailyExpenses = 0F
@@ -132,14 +126,14 @@ class SpendingDetailsViewModel @Inject constructor(val budgetRepository: BudgetR
                     }
                 }
             }
-            dataset.add(Entry(entryDay, dailyExpenses))
+            dataset.add(BarEntry(entryDay, dailyExpenses))
             entryDay++
         }
 
         return dataset
     }
 
-    fun setTimeFrame(timeFrame: String){
+    fun setTimeFrame(timeFrame: String) {
         _selectedTimeFrame.value = timeFrame
     }
 }

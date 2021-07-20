@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/SpendingDetailFragment"
-        android:name="com.example.budget.ui.SpendingDetails.SpendingDetailsFragment"
+        android:name="com.example.budget.ui.spending_details.SpendingDetailsFragment"
         android:label="{category}"
         tools:layout="@layout/fragment_spending_detail">
 

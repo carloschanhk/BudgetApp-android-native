@@ -1,4 +1,4 @@
-package com.example.budget.ui.SpendingDetails
+package com.example.budget.ui.spending_details
 
 import android.os.Build
 import android.os.Bundle
@@ -11,13 +11,15 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budget.R
 import com.example.budget.databinding.FragmentSpendingDetailBinding
-import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SpendingDetailsFragment : Fragment() {
     lateinit var spendingDetailsBinding: FragmentSpendingDetailBinding
     private val spendingDetailsViewModel: SpendingDetailsViewModel by viewModels()
-    lateinit var spendingChart: LineChart
+    lateinit var spendingChart: BarChart
     private val spendingDetailsFragmentArgs: SpendingDetailsFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -42,7 +44,11 @@ class SpendingDetailsFragment : Fragment() {
         spendingChart = spendingDetailsBinding.spendingChart
         spendingDetailsBinding.apply {
             lifecycleOwner = viewLifecycleOwner
-            tvSpendingDetailsCategory.text = spendingDetailsFragmentArgs.category
+            viewModel = spendingDetailsViewModel
+            rvDetailsTransactions.apply {
+                adapter = SpendingTransactionAdapter()
+                addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
+            }
         }
         val description = Description()
         description.isEnabled = false
@@ -51,25 +57,26 @@ class SpendingDetailsFragment : Fragment() {
             setDrawGridBackground(false)
             setTouchEnabled(false)
             xAxis.setDrawGridLines(false)
-            xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
             axisRight.setDrawLabels(false)
             axisRight.setDrawAxisLine(false)
             axisRight.setDrawGridLines(false)
-            axisLeft.setDrawLabels(false)
-            axisLeft.setDrawAxisLine(false)
-            axisLeft.setDrawGridLines(false)
-            axisLeft.spaceBottom = 200F
+//            axisLeft.setDrawLabels(true)
+//            axisLeft.setDrawAxisLine(false)
+//            axisLeft.setDrawGridLines(false)
+//            axisLeft.spaceBottom = 200F
             legend.isEnabled = false
         }
 
         spendingDetailsViewModel.isLoading.observe(viewLifecycleOwner, {
             if (it) {
+                spendingDetailsBinding.progressBar.visibility = View.VISIBLE
                 spendingDetailsBinding.spendingDetailLayout.visibility = View.GONE
             } else {
                 spendingDetailsBinding.progressBar.visibility = View.GONE
                 spendingDetailsBinding.spendingDetailLayout.visibility = View.VISIBLE
                 spendingChart.apply {
-                    data = LineData(getChartData("Last 7 Days", "Expenses"))
+                    data = BarData(getChartData("Last 7 Days", "Expenses"))
                     data.notifyDataChanged()
                     notifyDataSetChanged()
                     invalidate()
@@ -79,14 +86,15 @@ class SpendingDetailsFragment : Fragment() {
 
         spendingDetailsViewModel.selectedTimeFrame.observe(viewLifecycleOwner, {
             spendingChart.apply {
-                if (!spendingDetailsViewModel.isLoading.value!!){
-                    data = LineData(getChartData(it, "Expenses"))
+                if (!spendingDetailsViewModel.isLoading.value!!) {
+                    data = BarData(getChartData(it, "Expenses"))
                     data.notifyDataChanged()
                     notifyDataSetChanged()
                     invalidate()
                 }
-
             }
+            spendingDetailsBinding.rvDetailsTransactions.adapter?.notifyDataSetChanged()
+
         })
         spendingDetailsBinding.spinnerSetTimeframe.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -103,24 +111,20 @@ class SpendingDetailsFragment : Fragment() {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
-
             }
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return super.onOptionsItemSelected(item)
     }
 
-    fun getChartData(timeframe: String, label: String): LineDataSet {
-        val chartData = LineDataSet(spendingDetailsViewModel.getYAxisData(timeframe), label)
+    fun getChartData(timeframe: String, label: String): BarDataSet {
+        val chartData = BarDataSet(spendingDetailsViewModel.getYAxisData(timeframe), label)
         chartData.apply {
             color = requireActivity().getColor(R.color.color_main_50)
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-            fillColor = requireActivity().getColor(R.color.color_main_50)
-            fillAlpha = 255
             setDrawValues(false)
-            setDrawFilled(true)
-            setDrawCircles(false)
         }
         return chartData
     }
