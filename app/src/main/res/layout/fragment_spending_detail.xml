@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.budget.ui.spending_details.SpendingDetailsViewModel" />
@@ -15,6 +16,22 @@
         android:background="@drawable/main_background"
         android:orientation="vertical"
         tools:context=".ui.spending_details.SpendingDetailsFragment">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/spending_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="@dimen/horizontal_margin"
+            android:layout_marginTop="10dp"
+            android:background="@color/transparent"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+            app:popupTheme="@style/Theme.Budget.PopupOverlay"
+            app:titleTextColor="@color/white" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -29,12 +46,13 @@
             android:id="@+id/spending_detail_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 app:cardCornerRadius="40dp"
                 app:cardElevation="20dp">
@@ -45,20 +63,34 @@
                     android:layout_margin="20dp"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_spending_details_money_amount"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-black"
-                        android:text="@{@string/money_amount(viewModel.categoryExpenses)}"
-                        android:textSize="45sp"
-                        tools:text="$2,800" />
+                        android:layout_height="wrap_content">
 
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/spinner_set_timeframe"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/timeframe" />
+                        <TextView
+                            android:id="@+id/tv_spending_details_money_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-black"
+                            android:text="@{@string/money_amount(viewModel.categoryExpenses)}"
+                            android:textSize="45sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="$2,800" />
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/spinner_set_timeframe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/timeframe"
+                            android:spinnerMode="dropdown"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_spending_details_money_amount"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tv_spending_details_money_amount" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/spending_chart"
@@ -70,7 +102,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="-40dp"
                 app:cardCornerRadius="40dp"

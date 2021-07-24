@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/horizontal_margin"
             android:orientation="horizontal"
-            android:paddingVertical="30dp">
+            android:paddingVertical="15dp">
 
             <Button
                 android:id="@+id/btn_category"

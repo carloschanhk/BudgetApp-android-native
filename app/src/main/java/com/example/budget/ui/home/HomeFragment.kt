@@ -23,6 +23,7 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     private val homeViewModel: HomeViewModel by activityViewModels<HomeViewModel>()
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +36,23 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+            homeToolbar.apply {
+                title = getString(R.string.home_fragment_label)
+                inflateMenu(R.menu.menu_main)
+                setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.action_set_month_budget -> {
+                            findNavController().navigate(R.id.action_HomeFragment_to_setBudgetDialogFragment)
+                            true
+                        }
+                        R.id.action_add_expense -> {
+                            findNavController().navigate(R.id.action_HomeFragment_to_transactionCreationDialogFragment)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            }
             lifecycleOwner = viewLifecycleOwner
             viewModel = homeViewModel
             context = activity

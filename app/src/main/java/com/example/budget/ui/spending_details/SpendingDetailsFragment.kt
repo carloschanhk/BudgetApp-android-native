@@ -3,13 +3,13 @@ package com.example.budget.ui.spending_details
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +43,19 @@ class SpendingDetailsFragment : Fragment() {
         spendingDetailsViewModel.getAllExpenses(spendingDetailsFragmentArgs.category)
         spendingChart = spendingDetailsBinding.spendingChart
         spendingDetailsBinding.apply {
+            spendingToolbar.apply {
+                title = spendingDetailsFragmentArgs.category
+                inflateMenu(R.menu.menu_spending)
+                setOnMenuItemClickListener {
+                    when (it.itemId){
+                        R.id.icon_search_spending -> true
+                        else -> false
+                    }
+                }
+                setNavigationOnClickListener {
+                    findNavController().navigateUp()
+                }
+            }
             lifecycleOwner = viewLifecycleOwner
             viewModel = spendingDetailsViewModel
             rvDetailsTransactions.apply {
@@ -61,10 +74,6 @@ class SpendingDetailsFragment : Fragment() {
             axisRight.setDrawLabels(false)
             axisRight.setDrawAxisLine(false)
             axisRight.setDrawGridLines(false)
-//            axisLeft.setDrawLabels(true)
-//            axisLeft.setDrawAxisLine(false)
-//            axisLeft.setDrawGridLines(false)
-//            axisLeft.spaceBottom = 200F
             legend.isEnabled = false
         }
 
@@ -76,7 +85,7 @@ class SpendingDetailsFragment : Fragment() {
                 spendingDetailsBinding.progressBar.visibility = View.GONE
                 spendingDetailsBinding.spendingDetailLayout.visibility = View.VISIBLE
                 spendingChart.apply {
-                    data = BarData(getChartData("Last 7 Days", "Expenses"))
+                    data = BarData(getChartData("Last 7 Days", spendingDetailsFragmentArgs.category))
                     data.notifyDataChanged()
                     notifyDataSetChanged()
                     invalidate()
@@ -87,7 +96,7 @@ class SpendingDetailsFragment : Fragment() {
         spendingDetailsViewModel.selectedTimeFrame.observe(viewLifecycleOwner, {
             spendingChart.apply {
                 if (!spendingDetailsViewModel.isLoading.value!!) {
-                    data = BarData(getChartData(it, "Expenses"))
+                    data = BarData(getChartData(it, spendingDetailsFragmentArgs.category))
                     data.notifyDataChanged()
                     notifyDataSetChanged()
                     invalidate()
@@ -116,11 +125,7 @@ class SpendingDetailsFragment : Fragment() {
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
-    }
-
-    fun getChartData(timeframe: String, label: String): BarDataSet {
+    private fun getChartData(timeframe: String, label: String): BarDataSet {
         val chartData = BarDataSet(spendingDetailsViewModel.getYAxisData(timeframe), label)
         chartData.apply {
             color = requireActivity().getColor(R.color.color_main_50)
