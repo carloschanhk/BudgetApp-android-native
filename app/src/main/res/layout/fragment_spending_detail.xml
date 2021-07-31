@@ -31,7 +31,8 @@
             app:contentInsetStartWithNavigation="0dp"
             app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
             app:popupTheme="@style/Theme.Budget.PopupOverlay"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/white" >
+        </androidx.appcompat.widget.Toolbar>
 
         <ProgressBar
             android:id="@+id/progress_bar"

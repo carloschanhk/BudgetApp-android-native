@@ -42,6 +42,20 @@ class SpendingDetailsFragment : Fragment() {
                 setNavigationOnClickListener {
                     findNavController().navigateUp()
                 }
+                inflateMenu(R.menu.menu_spending_details)
+                setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.btn_spending_fragment_add -> {
+                            findNavController().navigate(
+                                SpendingDetailsFragmentDirections.actionSpendingDetailFragmentToTransactionCreationDialogFragment(
+                                    category = spendingDetailsFragmentArgs.category
+                                )
+                            )
+                            true
+                        }
+                        else -> false
+                    }
+                }
             }
             lifecycleOwner = viewLifecycleOwner
             viewModel = spendingDetailsViewModel

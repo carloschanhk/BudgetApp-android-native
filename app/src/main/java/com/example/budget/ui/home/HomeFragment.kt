@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
             viewModel = homeViewModel
             context = activity
             categoryTypes = CategoryType.values().toList()
-            homeBottomSection.rvTransactions.apply {
+            homeBottomSection.rvHomeTransactions.apply {
                 adapter = TransactionsAdapter(homeViewModel, findNavController())
                 addItemDecoration(
                     DividerItemDecoration(
@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
                     )
                 )
             }
-            homeBottomSection.rvCategory.apply {
+            homeBottomSection.rvHomeCategory.apply {
                 adapter = CategoryAdapter(context, homeViewModel, findNavController())
                 addItemDecoration(
                     DividerItemDecoration(
@@ -80,8 +80,8 @@ class HomeFragment : Fragment() {
         homeViewModel.showTransactions.observe(viewLifecycleOwner, { choice ->
             if (choice) {
                 binding.homeBottomSection.apply {
-                    rvCategory.visibility = View.GONE
-                    rvTransactions.visibility = View.VISIBLE
+                    rvHomeCategory.visibility = View.GONE
+                    rvHomeTransactions.visibility = View.VISIBLE
                     btnSort.visibility = View.VISIBLE
                     btnCategory.paintFlags =
                         Paint.UNDERLINE_TEXT_FLAG.inv() and btnCategory.paintFlags
@@ -89,8 +89,8 @@ class HomeFragment : Fragment() {
                 }
             } else {
                 binding.homeBottomSection.apply {
-                    rvCategory.visibility = View.VISIBLE
-                    rvTransactions.visibility = View.GONE
+                    rvHomeCategory.visibility = View.VISIBLE
+                    rvHomeTransactions.visibility = View.GONE
                     btnSort.visibility = View.GONE
                     btnCategory.paintFlags = Paint.UNDERLINE_TEXT_FLAG
                     btnTransactions.paintFlags =

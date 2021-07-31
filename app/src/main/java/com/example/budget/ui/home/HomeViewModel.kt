@@ -154,28 +154,9 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
         _sortByCost.value = id == R.id.action_sort_by_cost
     }
 
-    fun createTransaction(transaction: Transaction) {
-        viewModelScope.launch(Dispatchers.IO) {
-            budgetRepository.createTransaction(transaction)
-        }
-    }
-
     fun removeTransaction(transaction: Transaction) {
         viewModelScope.launch(Dispatchers.IO) {
             budgetRepository.removeTransaction(transaction)
-        }
-    }
-
-    //Editing Transaction
-
-    var targetedTransaction: Transaction? = null
-    fun editTransaction(transaction: Transaction) {
-        targetedTransaction = transaction
-    }
-
-    fun updateTransaction(transaction: Transaction) {
-        viewModelScope.launch(Dispatchers.IO) {
-            budgetRepository.updateTransaction(transaction)
         }
     }
 }
