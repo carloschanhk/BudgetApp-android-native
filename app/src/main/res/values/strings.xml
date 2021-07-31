@@ -5,6 +5,7 @@
     <string name="home_fragment_label">Expense</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="zero">0</string>
     <string-array name="categories">
         <item>Apparels</item>
         <item>Food</item>

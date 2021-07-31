@@ -11,7 +11,7 @@ import java.util.*
 
 @SuppressLint("SimpleDateFormat", "WeekBasedYear")
 @BindingAdapter("date")
-fun bindDateToText(textView: TextView, date: Date){
+fun bindDateToText(textView: TextView, date: Date) {
     textView.text = SimpleDateFormat("dd-MMM-YYYY").format(date)
 }
 
@@ -25,6 +25,7 @@ fun bindRecyclerViewData(
 }
 
 @BindingAdapter("transactionCost")
-fun bindMoneyAmountToText(textView: TextView, cost: Float){
-    textView.text = textView.resources.getString(R.string.money_amount,cost.toInt())
+fun bindMoneyAmountToText(textView: TextView, cost: Float) {
+    textView.text = textView.resources.getString(R.string.money_amount, cost.toInt())
 }
+

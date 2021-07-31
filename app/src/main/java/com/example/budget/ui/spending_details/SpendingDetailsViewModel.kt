@@ -2,11 +2,12 @@ package com.example.budget.ui.spending_details
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
+import com.example.budget.data.chart.BarChartEntry
 import com.example.budget.data.expense.Transaction
 import com.example.budget.repository.BudgetRepository
-import com.github.mikephil.charting.data.BarEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -83,6 +84,12 @@ class SpendingDetailsViewModel @Inject constructor(val budgetRepository: BudgetR
             }
         }
 
+    private val _barChartData = MutableLiveData<List<BarChartEntry>>(listOf())
+    val barChartData: LiveData<List<BarChartEntry>> get() = _barChartData
+
+    private val _yAxisLabel = MutableLiveData<Int>()
+    val yAxisLabel: LiveData<Int> get() = _yAxisLabel
+
 
     val categoryExpenses: LiveData<Int>
         get() =
@@ -107,30 +114,66 @@ class SpendingDetailsViewModel @Inject constructor(val budgetRepository: BudgetR
             calendar.add(Calendar.DAY_OF_YEAR, -1)
             dates.add(calendar.time.toInstant().atZone(ZoneId.systemDefault()).toLocalDate())
         }
+        Log.d("Testing", "getTimeframeDays: $dates")
         return dates.toList().sorted()
     }
 
-    fun getYAxisData(timeframe: String): MutableList<BarEntry> {
+//    fun getYAxisData(timeframe: String): MutableList<BarEntry> {
+//        val dates = getTimeframeDays(timeframe)
+//        val dataset = mutableListOf<BarEntry>()
+//        var entryDay = 0F
+//        for (date in dates) {
+//            var dailyExpenses = 0F
+//            val transactions = allExpenses
+//            if (transactions.isNotEmpty()) {
+//                for (item in transactions) {
+//                    if (item.date.toInstant().atZone(ZoneId.systemDefault())
+//                            .toLocalDate().dayOfYear == date.dayOfYear
+//                    ) {
+//                        dailyExpenses += item.cost
+//                    }
+//                }
+//            }
+//            dataset.add(BarEntry(entryDay, dailyExpenses))
+//            entryDay++
+//        }
+//
+//        return dataset
+//    }
+
+    fun loadBarChartData(timeframe: String) {
+        val dataset = mutableListOf<BarChartEntry>()
+        val expensesByDay = mutableListOf<Int>()
         val dates = getTimeframeDays(timeframe)
-        val dataset = mutableListOf<BarEntry>()
-        var entryDay = 0F
+        var highestDailyExpenses = 0F
         for (date in dates) {
-            var dailyExpenses = 0F
+            var dailyExpense = 0F
             val transactions = allExpenses
             if (transactions.isNotEmpty()) {
                 for (item in transactions) {
                     if (item.date.toInstant().atZone(ZoneId.systemDefault())
                             .toLocalDate().dayOfYear == date.dayOfYear
                     ) {
-                        dailyExpenses += item.cost
+                        dailyExpense += item.cost
                     }
                 }
+                highestDailyExpenses =
+                    if (dailyExpense > highestDailyExpenses) dailyExpense else highestDailyExpenses
+                expensesByDay.add(dailyExpense.toInt())
             }
-            dataset.add(BarEntry(entryDay, dailyExpenses))
-            entryDay++
         }
-
-        return dataset
+        for (i in dates.indices) {
+            val percentageToHighestExpense = expensesByDay[i] / highestDailyExpenses * 100
+            dataset.add(
+                BarChartEntry(
+                    expensesByDay[i],
+                    percentageToHighestExpense.toInt(),
+                    dates[i]
+                )
+            )
+        }
+        _barChartData.postValue(dataset)
+        _yAxisLabel.postValue(highestDailyExpenses.toInt())
     }
 
     fun setTimeFrame(timeFrame: String) {
