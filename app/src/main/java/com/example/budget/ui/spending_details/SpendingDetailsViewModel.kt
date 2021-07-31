@@ -146,10 +146,10 @@ class SpendingDetailsViewModel @Inject constructor(val budgetRepository: BudgetR
         val expensesByDay = mutableListOf<Int>()
         val dates = getTimeframeDays(timeframe)
         var highestDailyExpenses = 0F
-        for (date in dates) {
-            var dailyExpense = 0F
-            val transactions = allExpenses
-            if (transactions.isNotEmpty()) {
+        val transactions = allExpenses
+        if (!transactions.isNullOrEmpty()) {
+            for (date in dates) {
+                var dailyExpense = 0F
                 for (item in transactions) {
                     if (item.date.toInstant().atZone(ZoneId.systemDefault())
                             .toLocalDate().dayOfYear == date.dayOfYear
@@ -161,16 +161,16 @@ class SpendingDetailsViewModel @Inject constructor(val budgetRepository: BudgetR
                     if (dailyExpense > highestDailyExpenses) dailyExpense else highestDailyExpenses
                 expensesByDay.add(dailyExpense.toInt())
             }
-        }
-        for (i in dates.indices) {
-            val percentageToHighestExpense = expensesByDay[i] / highestDailyExpenses * 100
-            dataset.add(
-                BarChartEntry(
-                    expensesByDay[i],
-                    percentageToHighestExpense.toInt(),
-                    dates[i]
+            for (i in dates.indices) {
+                val percentageToHighestExpense = expensesByDay[i] / highestDailyExpenses * 100
+                dataset.add(
+                    BarChartEntry(
+                        expensesByDay[i],
+                        percentageToHighestExpense.toInt(),
+                        dates[i]
+                    )
                 )
-            )
+            }
         }
         _barChartData.postValue(dataset)
         _yAxisLabel.postValue(highestDailyExpenses.toInt())
