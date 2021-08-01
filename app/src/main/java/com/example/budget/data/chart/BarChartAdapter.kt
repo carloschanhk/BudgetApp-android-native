@@ -1,6 +1,5 @@
 package com.example.budget.data.chart
 
-import android.content.Context
 import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.budget.R
 import com.example.budget.databinding.SpendingBarItemBinding
 
-class BarChartAdapter(val context: Context) :
+class BarChartAdapter :
     ListAdapter<BarChartEntry, BarChartAdapter.BarChartEntryViewHolder>(DiffCallback) {
     companion object DiffCallback : DiffUtil.ItemCallback<BarChartEntry>() {
         override fun areItemsTheSame(oldItem: BarChartEntry, newItem: BarChartEntry): Boolean {
@@ -29,7 +28,8 @@ class BarChartAdapter(val context: Context) :
         fun bind(barChartEntry: BarChartEntry, itemCount: Int) {
             binding.entry = barChartEntry
             binding.barChartProgress.layoutParams.width = if (itemCount == 7)
-                resources.getDimension(R.dimen.bar_width_seven_days).toInt() else resources.getDimension(R.dimen.bar_width_30_days).toInt()
+                resources.getDimension(R.dimen.bar_width_seven_days)
+                    .toInt() else resources.getDimension(R.dimen.bar_width_30_days).toInt()
         }
     }
 

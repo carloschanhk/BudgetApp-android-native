@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budget.R
 import com.example.budget.data.chart.BarChartAdapter
 import com.example.budget.databinding.FragmentSpendingDetailBinding
+import com.example.budget.ui.dialog.TransactionCreationDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,7 +36,15 @@ class SpendingDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        spendingDetailsViewModel.getAllExpenses(spendingDetailsFragmentArgs.category)
+        parentFragmentManager.setFragmentResultListener(
+            TransactionCreationDialogFragment.TRANSACTION_UPDATE,
+            viewLifecycleOwner
+        ) { key: String, bundle: Bundle ->
+            if (bundle.getBoolean(key)) spendingDetailsViewModel.getTransactions(
+                spendingDetailsFragmentArgs.category
+            )
+        }
+        spendingDetailsViewModel.getTransactions(spendingDetailsFragmentArgs.category)
         spendingDetailsBinding.apply {
             spendingToolbar.apply {
                 title = spendingDetailsFragmentArgs.category
@@ -63,26 +72,18 @@ class SpendingDetailsFragment : Fragment() {
                 adapter = SpendingTransactionAdapter()
                 addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
             }
-            rvBarChart.adapter = context?.let { BarChartAdapter(it) }
+            spendingBarChart.rvBarChart.adapter = BarChartAdapter()
         }
 
-        spendingDetailsViewModel.isLoading.observe(viewLifecycleOwner, {
-            if (it) {
-                spendingDetailsBinding.progressBar.visibility = View.VISIBLE
-                spendingDetailsBinding.spendingDetailLayout.visibility = View.GONE
-            } else {
-                spendingDetailsBinding.progressBar.visibility = View.GONE
-                spendingDetailsBinding.spendingDetailLayout.visibility = View.VISIBLE
-                spendingDetailsViewModel.loadBarChartData("Last 7 Days")
-            }
-        })
-
         spendingDetailsViewModel.selectedTimeFrame.observe(viewLifecycleOwner, {
-            spendingDetailsViewModel.loadBarChartData(it)
-            spendingDetailsBinding.rvBarChart.adapter?.notifyDataSetChanged()
-            spendingDetailsBinding.rvDetailsTransactions.adapter?.notifyDataSetChanged()
-
+            spendingDetailsViewModel.getTransactions(spendingDetailsFragmentArgs.category)
         })
+
+        spendingDetailsViewModel.isDataSetChanged.observe(viewLifecycleOwner, {
+            spendingDetailsBinding.spendingBarChart.rvBarChart.adapter?.notifyDataSetChanged()
+            spendingDetailsBinding.rvDetailsTransactions.adapter?.notifyDataSetChanged()
+        })
+
         spendingDetailsBinding.spinnerSetTimeframe.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -99,7 +100,6 @@ class SpendingDetailsFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
-
 
     }
 }

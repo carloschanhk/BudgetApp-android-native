@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budget.R
 import com.example.budget.common.CategoryType
 import com.example.budget.databinding.FragmentHomeBinding
+import com.example.budget.ui.dialog.TransactionCreationDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -75,6 +76,10 @@ class HomeFragment : Fragment() {
                     )
                 )
             }
+
+            parentFragmentManager.setFragmentResultListener(TransactionCreationDialogFragment.TRANSACTION_UPDATE,viewLifecycleOwner){
+                key:String, bundle: Bundle -> if (bundle.getBoolean(key)) refreshRecyclerView()
+            }
         }
 
         homeViewModel.showTransactions.observe(viewLifecycleOwner, { choice ->
@@ -108,6 +113,13 @@ class HomeFragment : Fragment() {
         })
         sortButton.setOnClickListener {
             dropDownMenu.show()
+        }
+    }
+
+    private fun refreshRecyclerView(){
+        binding.homeBottomSection.apply {
+            rvHomeCategory.adapter?.notifyDataSetChanged()
+            rvHomeTransactions.adapter?.notifyDataSetChanged()
         }
     }
 }

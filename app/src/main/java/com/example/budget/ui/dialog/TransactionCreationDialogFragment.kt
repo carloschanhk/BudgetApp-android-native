@@ -12,20 +12,15 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.RecyclerView
 import com.example.budget.R
-import com.example.budget.data.chart.BarChartAdapter
 import com.example.budget.data.expense.Transaction
 import com.example.budget.databinding.DialogAddTransactionBinding
-import com.example.budget.ui.home.CategoryAdapter
-import com.example.budget.ui.home.TransactionsAdapter
-import com.example.budget.ui.spending_details.SpendingTransactionAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
+class TransactionCreationDialogFragment : BottomSheetDialogFragment() {
     private val viewModel: TransactionCreationDialogViewModel by viewModels()
     private var binding: DialogAddTransactionBinding? = null
     lateinit var etTransactionTitle: EditText
@@ -36,11 +31,6 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
     var targetedTransaction: Transaction? = null
     var category: String? = null
     private val calendar = Calendar.getInstance()
-    private var transactionsAdapter: TransactionsAdapter? = null
-    private var categoryAdapter: CategoryAdapter? = null
-    private var spendingTransactionAdapter: SpendingTransactionAdapter? = null
-    private var barChartAdapter: BarChartAdapter? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,12 +48,6 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
         etTransactionTitle = view.findViewById(R.id.et_transaction_title)
         spTransactionCategory = view.findViewById(R.id.spinner_set_category)
         datePicker = view.findViewById(R.id.date_picker)
-        transactionsAdapter =
-            activity?.findViewById<RecyclerView>(R.id.rv_home_transactions)?.adapter as? TransactionsAdapter
-        categoryAdapter =
-            activity?.findViewById<RecyclerView>(R.id.rv_home_category)?.adapter as? CategoryAdapter
-        spendingTransactionAdapter = activity?.findViewById<RecyclerView>(R.id.rv_details_transactions)?.adapter as? SpendingTransactionAdapter
-        barChartAdapter = activity?.findViewById<RecyclerView>(R.id.rv_bar_chart)?.adapter as? BarChartAdapter
 
         binding?.apply {
             fragment = this@TransactionCreationDialogFragment
@@ -115,10 +99,11 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
                     )
                 )
             }
-            transactionsAdapter?.notifyDataSetChanged()
-            categoryAdapter?.notifyDataSetChanged()
-            spendingTransactionAdapter?.notifyDataSetChanged()
-            barChartAdapter?.notifyDataSetChanged()
+            parentFragmentManager.setFragmentResult(TRANSACTION_UPDATE, Bundle().apply {
+                putBoolean(
+                    TRANSACTION_UPDATE, true
+                )
+            })
             findNavController().navigateUp()
         } else {
             if (etTransactionTitle.text.isEmpty()) {
@@ -133,5 +118,10 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
 
     fun onCancel() {
         findNavController().navigateUp()
+    }
+
+    companion object {
+        const val CONFIRMED = "CONFIRMED"
+        const val TRANSACTION_UPDATE = "TRANSACTION_UPDATE"
     }
 }

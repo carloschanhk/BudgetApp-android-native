@@ -2,7 +2,6 @@ package com.example.budget.ui.spending_details
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.example.budget.data.chart.BarChartEntry
@@ -24,54 +23,18 @@ class SpendingDetailsViewModel @Inject constructor(val budgetRepository: BudgetR
     private val _selectedTimeFrame = MutableLiveData<String>("Last 7 Days")
     val selectedTimeFrame: LiveData<String> get() = _selectedTimeFrame
 
-    private val _isLoading = MutableLiveData<Boolean>(true)
-    val isLoading: LiveData<Boolean> get() = _isLoading
-    lateinit var allExpenses: List<Transaction>
-
-    fun getAllExpenses(category: String) {
+    fun getTransactions(category: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            allExpenses = budgetRepository.getTransactions(category)
-            _filteredTransaction.postValue(allExpenses)
-            _isLoading.postValue(false)
+            val response = budgetRepository.getTransactions(category)
+            _filteredTransaction.postValue(response)
+            _isDataSetChanged.postValue(true)
         }
     }
 
-//    private val _xAxisValues = MutableLiveData<MutableList<String>>(mutableListOf())
-//    val xAxisValues: LiveData<List<String>>
-//        get() = Transformations.switchMap(selectedTimeFrame) { timeFrame ->
-//            Transformations.map(_xAxisValues) { list ->
-//                list.clear()
-//                when (timeFrame) {
-////                    "Week" -> list.addAll(listOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
-//                    "Week" -> list.addAll(getTimeframeDays().sortedBy { it }.map {
-//                        it.format(
-//                            DateTimeFormatter.ofPattern(
-//                                "E"
-//                            )
-//                        )
-//                    })
-//                    "Year" -> list.addAll(
-//                        listOf(
-//                            "Jan",
-//                            "Feb",
-//                            "Mar",
-//                            "Apr",
-//                            "May",
-//                            "Jun",
-//                            "Jul",
-//                            "Aug",
-//                            "Sep",
-//                            "Oct",
-//                            "Nov",
-//                            "Dec"
-//                        )
-//                    )
-//                }
-//                list
-//            }
-//        }
+    private val _isDataSetChanged = MutableLiveData<Boolean>(false)
+    val isDataSetChanged: LiveData<Boolean> get() = _isDataSetChanged
 
-    private val _filteredTransaction = MutableLiveData<List<Transaction>>(listOf())
+    private val _filteredTransaction = MutableLiveData<List<Transaction>>()
     val filteredTransaction: LiveData<List<Transaction>>
         get() = Transformations.switchMap(_filteredTransaction) { transactions ->
             Transformations.map(selectedTimeFrame) { timeframe ->
@@ -81,11 +44,50 @@ class SpendingDetailsViewModel @Inject constructor(val budgetRepository: BudgetR
                         it.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().dayOfYear
                     ) != -1
                 }
+
             }
         }
 
-    private val _barChartData = MutableLiveData<List<BarChartEntry>>(listOf())
-    val barChartData: LiveData<List<BarChartEntry>> get() = _barChartData
+    private val _barChartData = MutableLiveData<MutableList<BarChartEntry>>(mutableListOf())
+    val barChartData: LiveData<List<BarChartEntry>>
+        get() = Transformations.switchMap(_barChartData) { dataset ->
+            Transformations.switchMap(filteredTransaction) { transactions ->
+                Transformations.map(selectedTimeFrame) { selectedTimeFrame ->
+                    dataset.clear()
+                    val dates = getTimeframeDays(selectedTimeFrame)
+                    val expensesByDay = mutableListOf<Int>()
+                    var highestDailyExpense = 0F
+                    if (!transactions.isNullOrEmpty()) {
+                        for (date in dates) {
+                            var dailyExpense = 0F
+                            for (item in transactions) {
+                                if (item.date.toInstant().atZone(ZoneId.systemDefault())
+                                        .toLocalDate().dayOfYear == date.dayOfYear
+                                ) {
+                                    dailyExpense += item.cost
+                                }
+                            }
+                            highestDailyExpense =
+                                if (dailyExpense > highestDailyExpense) dailyExpense else highestDailyExpense
+                            expensesByDay.add(dailyExpense.toInt())
+                        }
+                        for (i in dates.indices) {
+                            val percentageToHighestExpense =
+                                expensesByDay[i] / highestDailyExpense * 100
+                            dataset.add(
+                                BarChartEntry(
+                                    expensesByDay[i],
+                                    percentageToHighestExpense.toInt(),
+                                    dates[i]
+                                )
+                            )
+                        }
+                    }
+                    _yAxisLabel.postValue(highestDailyExpense.toInt())
+                    dataset
+                }
+            }
+        }
 
     private val _yAxisLabel = MutableLiveData<Int>()
     val yAxisLabel: LiveData<Int> get() = _yAxisLabel
@@ -114,66 +116,7 @@ class SpendingDetailsViewModel @Inject constructor(val budgetRepository: BudgetR
             calendar.add(Calendar.DAY_OF_YEAR, -1)
             dates.add(calendar.time.toInstant().atZone(ZoneId.systemDefault()).toLocalDate())
         }
-        Log.d("Testing", "getTimeframeDays: $dates")
         return dates.toList().sorted()
-    }
-
-//    fun getYAxisData(timeframe: String): MutableList<BarEntry> {
-//        val dates = getTimeframeDays(timeframe)
-//        val dataset = mutableListOf<BarEntry>()
-//        var entryDay = 0F
-//        for (date in dates) {
-//            var dailyExpenses = 0F
-//            val transactions = allExpenses
-//            if (transactions.isNotEmpty()) {
-//                for (item in transactions) {
-//                    if (item.date.toInstant().atZone(ZoneId.systemDefault())
-//                            .toLocalDate().dayOfYear == date.dayOfYear
-//                    ) {
-//                        dailyExpenses += item.cost
-//                    }
-//                }
-//            }
-//            dataset.add(BarEntry(entryDay, dailyExpenses))
-//            entryDay++
-//        }
-//
-//        return dataset
-//    }
-
-    fun loadBarChartData(timeframe: String) {
-        val dataset = mutableListOf<BarChartEntry>()
-        val expensesByDay = mutableListOf<Int>()
-        val dates = getTimeframeDays(timeframe)
-        var highestDailyExpenses = 0F
-        val transactions = allExpenses
-        if (!transactions.isNullOrEmpty()) {
-            for (date in dates) {
-                var dailyExpense = 0F
-                for (item in transactions) {
-                    if (item.date.toInstant().atZone(ZoneId.systemDefault())
-                            .toLocalDate().dayOfYear == date.dayOfYear
-                    ) {
-                        dailyExpense += item.cost
-                    }
-                }
-                highestDailyExpenses =
-                    if (dailyExpense > highestDailyExpenses) dailyExpense else highestDailyExpenses
-                expensesByDay.add(dailyExpense.toInt())
-            }
-            for (i in dates.indices) {
-                val percentageToHighestExpense = expensesByDay[i] / highestDailyExpenses * 100
-                dataset.add(
-                    BarChartEntry(
-                        expensesByDay[i],
-                        percentageToHighestExpense.toInt(),
-                        dates[i]
-                    )
-                )
-            }
-        }
-        _barChartData.postValue(dataset)
-        _yAxisLabel.postValue(highestDailyExpenses.toInt())
     }
 
     fun setTimeFrame(timeFrame: String) {

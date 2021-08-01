@@ -34,14 +34,14 @@
             app:titleTextColor="@color/white" >
         </androidx.appcompat.widget.Toolbar>
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="@style/Base.Widget.AppCompat.ProgressBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:visibility="gone" />
+<!--        <ProgressBar-->
+<!--            android:id="@+id/progress_bar"-->
+<!--            style="@style/Base.Widget.AppCompat.ProgressBar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:indeterminate="true"-->
+<!--            android:visibility="gone" />-->
 
         <LinearLayout
             android:id="@+id/spending_detail_layout"
@@ -74,8 +74,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-black"
-                            android:text="@{@string/money_amount(viewModel.categoryExpenses)}"
                             android:textSize="45sp"
+                            app:categoryCost="@{viewModel.categoryExpenses}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -93,59 +93,10 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_marginTop="15dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:id="@+id/layout_y_axis_labels"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            android:layout_marginBottom="20dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:highestExpense="@{viewModel.YAxisLabel}"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                tools:text="1000" />
-
-                            <Space
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/zero"
-                                android:layout_gravity="center"
-                                 />
-                        </LinearLayout>
-
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rv_bar_chart"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="10dp"
-                            android:orientation="horizontal"
-                            android:layout_marginStart="10dp"
-                            app:barChartData="@{viewModel.barChartData}"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            app:layout_constrainedWidth="true"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/layout_y_axis_labels"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:itemCount="7"
-                            tools:listitem="@layout/spending_bar_item" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <include
+                        android:id="@+id/spending_bar_chart"
+                        app:viewModel="@{viewModel}"
+                        layout="@layout/bar_chart_layout"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -164,7 +115,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="40dp"
                     android:scrollbars="none"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:spendingDetailsData="@{viewModel.filteredTransaction}"

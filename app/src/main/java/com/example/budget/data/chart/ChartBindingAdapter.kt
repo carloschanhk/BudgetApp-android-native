@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import java.time.LocalDate
 
 @BindingAdapter("barChartData")
-fun bindBarChartData(recyclerView: RecyclerView, data: List<BarChartEntry>) {
+fun bindBarChartData(recyclerView: RecyclerView, data: List<BarChartEntry>?) {
     val adapter = recyclerView.adapter as BarChartAdapter
-    adapter.submitList(data)
+    data?.let { adapter.submitList(it) }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

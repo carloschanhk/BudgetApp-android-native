@@ -18,14 +18,19 @@ fun bindDateToText(textView: TextView, date: Date) {
 @BindingAdapter("spendingDetailsData")
 fun bindRecyclerViewData(
     recyclerView: RecyclerView,
-    data: List<Transaction>
+    data: List<Transaction>?
 ) {
     val adapter = recyclerView.adapter as SpendingTransactionAdapter
-    adapter.submitList(data)
+    data?.let { adapter.submitList(it) }
 }
 
 @BindingAdapter("transactionCost")
 fun bindMoneyAmountToText(textView: TextView, cost: Float) {
     textView.text = textView.resources.getString(R.string.money_amount, cost.toInt())
+}
+
+@BindingAdapter("categoryCost")
+fun bindCostToText(textView: TextView, cost: Int?) {
+    textView.text = textView.resources.getString(R.string.money_amount, cost ?: 0)
 }
 
