@@ -6,6 +6,9 @@
         <variable
             name="entry"
             type="com.example.budget.data.chart.BarChartEntry" />
+        <variable
+            name="itemCount"
+            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -102,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barEntryDate="@{entry.date}"
+            app:itemCount="@{itemCount}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
