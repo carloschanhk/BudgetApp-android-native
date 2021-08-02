@@ -42,4 +42,6 @@
         <item quantity="other">%d transactions</item>
     </plurals>
     <string name="chart_date">%1$d/%2$d</string>
+    <string name="add_transaction_message">Please add transaction for this category</string>
+    <string name="add_budget_message">Please set the budget for this month</string>
 </resources>

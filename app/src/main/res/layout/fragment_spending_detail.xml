@@ -31,17 +31,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
             app:popupTheme="@style/Theme.Budget.PopupOverlay"
-            app:titleTextColor="@color/white" >
-        </androidx.appcompat.widget.Toolbar>
-
-<!--        <ProgressBar-->
-<!--            android:id="@+id/progress_bar"-->
-<!--            style="@style/Base.Widget.AppCompat.ProgressBar"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:indeterminate="true"-->
-<!--            android:visibility="gone" />-->
+            app:titleTextColor="@color/white"/>
 
         <LinearLayout
             android:id="@+id/spending_detail_layout"
@@ -93,10 +83,20 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <TextView
+                        android:id="@+id/tv_add_transaction_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/add_transaction_message"
+                        android:textColor="@color/brown"
+                        android:textSize="25sp"
+                        android:visibility="gone" />
+
                     <include
                         android:id="@+id/spending_bar_chart"
-                        app:viewModel="@{viewModel}"
-                        layout="@layout/bar_chart_layout"/>
+                        layout="@layout/bar_chart_layout"
+                        app:viewModel="@{viewModel}" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

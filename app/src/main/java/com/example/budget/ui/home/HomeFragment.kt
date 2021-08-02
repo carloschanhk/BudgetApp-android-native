@@ -77,8 +77,11 @@ class HomeFragment : Fragment() {
                 )
             }
 
-            parentFragmentManager.setFragmentResultListener(TransactionCreationDialogFragment.TRANSACTION_UPDATE,viewLifecycleOwner){
-                key:String, bundle: Bundle -> if (bundle.getBoolean(key)) refreshRecyclerView()
+            parentFragmentManager.setFragmentResultListener(
+                TransactionCreationDialogFragment.TRANSACTION_UPDATE,
+                viewLifecycleOwner
+            ) { key: String, bundle: Bundle ->
+                if (bundle.getBoolean(key)) refreshRecyclerView()
             }
         }
 
@@ -104,6 +107,12 @@ class HomeFragment : Fragment() {
             }
         })
 
+        homeViewModel.monthBudget.observe(viewLifecycleOwner, {
+            it.observe(viewLifecycleOwner, { budget ->
+                binding.tvAddBudgetMessage.visibility = if (budget == 0 || budget == null) View.VISIBLE else View.GONE
+            })
+        })
+
         val sortButton = binding.homeBottomSection.btnSort
         val dropDownMenu = PopupMenu(activity, sortButton)
         dropDownMenu.inflate(R.menu.menu_sort_transactions)
@@ -116,7 +125,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun refreshRecyclerView(){
+    private fun refreshRecyclerView() {
         binding.homeBottomSection.apply {
             rvHomeCategory.adapter?.notifyDataSetChanged()
             rvHomeTransactions.adapter?.notifyDataSetChanged()

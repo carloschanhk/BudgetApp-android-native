@@ -84,6 +84,11 @@ class SpendingDetailsFragment : Fragment() {
             spendingDetailsBinding.rvDetailsTransactions.adapter?.notifyDataSetChanged()
         })
 
+        spendingDetailsViewModel.barChartData.observe(viewLifecycleOwner, {
+            spendingDetailsBinding.tvAddTransactionMessage.visibility =
+                if (it.isNullOrEmpty()) View.VISIBLE else View.GONE
+        })
+
         spendingDetailsBinding.spinnerSetTimeframe.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
