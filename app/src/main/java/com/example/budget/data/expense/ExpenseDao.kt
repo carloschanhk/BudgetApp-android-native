@@ -11,10 +11,10 @@ interface ExpenseDao {
     @Delete
     fun deleteTransaction(transaction: Transaction)
 
-    @Query("SELECT * FROM `transaction` WHERE category= :category")
-    fun getTransactions(category: String): Flow<MutableList<Transaction>>
+    @Query("SELECT * FROM `transaction` WHERE category= :category ORDER BY date ASC")
+    fun getTransactions(category: String): List<Transaction>
 
-    @Query("SELECT * FROM `transaction`")
+    @Query("SELECT * FROM `transaction` ORDER BY date ASC")
     fun getAllTransactions(): Flow<MutableList<Transaction>>
 
     @Update

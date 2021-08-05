@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budget.R
 import com.example.budget.common.CategoryType
 import com.example.budget.databinding.FragmentHomeBinding
+import com.example.budget.ui.dialog.TransactionCreationDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,6 +24,7 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     private val homeViewModel: HomeViewModel by activityViewModels<HomeViewModel>()
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,11 +37,28 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+            homeToolbar.apply {
+                title = getString(R.string.home_fragment_label)
+                inflateMenu(R.menu.menu_main)
+                setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.action_set_month_budget -> {
+                            findNavController().navigate(R.id.action_HomeFragment_to_setBudgetDialogFragment)
+                            true
+                        }
+                        R.id.action_add_expense -> {
+                            findNavController().navigate(R.id.action_HomeFragment_to_transactionCreationDialogFragment)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            }
             lifecycleOwner = viewLifecycleOwner
             viewModel = homeViewModel
             context = activity
             categoryTypes = CategoryType.values().toList()
-            homeBottomSection.rvTransactions.apply {
+            homeBottomSection.rvHomeTransactions.apply {
                 adapter = TransactionsAdapter(homeViewModel, findNavController())
                 addItemDecoration(
                     DividerItemDecoration(
@@ -48,8 +67,8 @@ class HomeFragment : Fragment() {
                     )
                 )
             }
-            homeBottomSection.rvCategory.apply {
-                adapter = CategoryAdapter(context, homeViewModel)
+            homeBottomSection.rvHomeCategory.apply {
+                adapter = CategoryAdapter(context, homeViewModel, findNavController())
                 addItemDecoration(
                     DividerItemDecoration(
                         activity,
@@ -57,13 +76,20 @@ class HomeFragment : Fragment() {
                     )
                 )
             }
+
+            parentFragmentManager.setFragmentResultListener(
+                TransactionCreationDialogFragment.TRANSACTION_UPDATE,
+                viewLifecycleOwner
+            ) { key: String, bundle: Bundle ->
+                if (bundle.getBoolean(key)) refreshRecyclerView()
+            }
         }
 
         homeViewModel.showTransactions.observe(viewLifecycleOwner, { choice ->
             if (choice) {
                 binding.homeBottomSection.apply {
-                    rvCategory.visibility = View.GONE
-                    rvTransactions.visibility = View.VISIBLE
+                    rvHomeCategory.visibility = View.GONE
+                    rvHomeTransactions.visibility = View.VISIBLE
                     btnSort.visibility = View.VISIBLE
                     btnCategory.paintFlags =
                         Paint.UNDERLINE_TEXT_FLAG.inv() and btnCategory.paintFlags
@@ -71,14 +97,20 @@ class HomeFragment : Fragment() {
                 }
             } else {
                 binding.homeBottomSection.apply {
-                    rvCategory.visibility = View.VISIBLE
-                    rvTransactions.visibility = View.GONE
+                    rvHomeCategory.visibility = View.VISIBLE
+                    rvHomeTransactions.visibility = View.GONE
                     btnSort.visibility = View.GONE
                     btnCategory.paintFlags = Paint.UNDERLINE_TEXT_FLAG
                     btnTransactions.paintFlags =
                         Paint.UNDERLINE_TEXT_FLAG.inv() and btnTransactions.paintFlags
                 }
             }
+        })
+
+        homeViewModel.monthBudget.observe(viewLifecycleOwner, {
+            it.observe(viewLifecycleOwner, { budget ->
+                binding.tvAddBudgetMessage.visibility = if (budget == 0 || budget == null) View.VISIBLE else View.GONE
+            })
         })
 
         val sortButton = binding.homeBottomSection.btnSort
@@ -90,6 +122,13 @@ class HomeFragment : Fragment() {
         })
         sortButton.setOnClickListener {
             dropDownMenu.show()
+        }
+    }
+
+    private fun refreshRecyclerView() {
+        binding.homeBottomSection.apply {
+            rvHomeCategory.adapter?.notifyDataSetChanged()
+            rvHomeTransactions.adapter?.notifyDataSetChanged()
         }
     }
 }

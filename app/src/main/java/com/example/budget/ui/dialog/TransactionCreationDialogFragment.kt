@@ -9,36 +9,28 @@ import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.navArgs
 import com.example.budget.R
 import com.example.budget.data.expense.Transaction
 import com.example.budget.databinding.DialogAddTransactionBinding
-import com.example.budget.repository.BudgetRepository
-import com.example.budget.ui.home.CategoryAdapter
-import com.example.budget.ui.home.HomeViewModel
-import com.example.budget.ui.home.TransactionsAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
-    @Inject
-    lateinit var budgetRepository: BudgetRepository
-    private val homeViewModel: HomeViewModel by activityViewModels<HomeViewModel>()
+class TransactionCreationDialogFragment : BottomSheetDialogFragment() {
+    private val viewModel: TransactionCreationDialogViewModel by viewModels()
     private var binding: DialogAddTransactionBinding? = null
     lateinit var etTransactionTitle: EditText
     lateinit var etTransactionCost: EditText
     lateinit var spTransactionCategory: Spinner
     lateinit var datePicker: DatePicker
+    private val transactionCreationDialogFragmentArgs: TransactionCreationDialogFragmentArgs by navArgs()
     var targetedTransaction: Transaction? = null
+    var category: String? = null
     private val calendar = Calendar.getInstance()
-    private lateinit var transactionsAdapter: TransactionsAdapter
-    private lateinit var categoryAdapter: CategoryAdapter
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,13 +48,11 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
         etTransactionTitle = view.findViewById(R.id.et_transaction_title)
         spTransactionCategory = view.findViewById(R.id.spinner_set_category)
         datePicker = view.findViewById(R.id.date_picker)
-        transactionsAdapter = activity?.findViewById<RecyclerView>(R.id.rv_transactions)?.adapter as TransactionsAdapter
-        categoryAdapter = activity?.findViewById<RecyclerView>(R.id.rv_category)?.adapter as CategoryAdapter
 
         binding?.apply {
             fragment = this@TransactionCreationDialogFragment
         }
-        targetedTransaction = homeViewModel.targetedTransaction
+        targetedTransaction = transactionCreationDialogFragmentArgs.transaction
         targetedTransaction?.let {
             etTransactionTitle.setText(it.title)
             etTransactionCost.setText(it.cost.toString())
@@ -76,11 +66,12 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
                 resources.getStringArray(R.array.categories).indexOf(it.category)
             )
         }
-    }
-
-    override fun dismiss() {
-        super.dismiss()
-        homeViewModel.targetedTransaction = null
+        category = transactionCreationDialogFragmentArgs.category
+        category?.let {
+            spTransactionCategory.setSelection(
+                resources.getStringArray(R.array.categories).indexOf(it)
+            )
+        }
     }
 
     fun onConfirm() {
@@ -90,7 +81,7 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
                 calendar.set(it.year, it.month, it.dayOfMonth)
             }
             if (targetedTransaction != null) {
-                homeViewModel.updateTransaction(
+                viewModel.updateTransaction(
                     targetedTransaction!!.apply {
                         category = spTransactionCategory.selectedItem.toString()
                         date = calendar.time
@@ -99,7 +90,7 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
                     }
                 )
             } else {
-                homeViewModel.createTransaction(
+                viewModel.createTransaction(
                     Transaction(
                         category = spTransactionCategory.selectedItem.toString(),
                         date = calendar.time,
@@ -108,8 +99,11 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
                     )
                 )
             }
-            transactionsAdapter.notifyDataSetChanged()
-            categoryAdapter.notifyDataSetChanged()
+            parentFragmentManager.setFragmentResult(TRANSACTION_UPDATE, Bundle().apply {
+                putBoolean(
+                    TRANSACTION_UPDATE, true
+                )
+            })
             findNavController().navigateUp()
         } else {
             if (etTransactionTitle.text.isEmpty()) {
@@ -124,5 +118,10 @@ class TransactionCreationDialogFragment() : BottomSheetDialogFragment() {
 
     fun onCancel() {
         findNavController().navigateUp()
+    }
+
+    companion object {
+        const val CONFIRMED = "CONFIRMED"
+        const val TRANSACTION_UPDATE = "TRANSACTION_UPDATE"
     }
 }

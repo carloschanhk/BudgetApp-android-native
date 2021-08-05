@@ -2,10 +2,10 @@
     <string name="app_name">Budget</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="home_fragment_label">Expense</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="zero">0</string>
     <string-array name="categories">
         <item>Apparels</item>
         <item>Food</item>
@@ -29,6 +29,10 @@
         <item>November</item>
         <item>December</item>
     </string-array>
+    <string-array name="timeframe">
+        <item>Last 7 Days</item>
+        <item>Last 30 Days</item>
+    </string-array>
     <string name="money_amount">$%d</string>
     <string name="transaction">%d transaction</string>
     <string name="budget_percentage">%d%%  of budget </string>
@@ -37,4 +41,7 @@
         <item quantity="one">@string/transaction</item>
         <item quantity="other">%d transactions</item>
     </plurals>
+    <string name="chart_date">%1$d/%2$d</string>
+    <string name="add_transaction_message">Please add transaction for this category</string>
+    <string name="add_budget_message">Please set the budget for this month</string>
 </resources>

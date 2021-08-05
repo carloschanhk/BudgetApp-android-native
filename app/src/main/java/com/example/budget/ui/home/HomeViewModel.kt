@@ -22,90 +22,6 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
     private val _selectedMonth = MutableLiveData<String>(SimpleDateFormat("MMMM").format(Date()))
     val selectedMonth: LiveData<String> get() = _selectedMonth
 
-    // Category item
-    private val _apparelsExpenses = budgetRepository.getTransactions("Apparels").asLiveData()
-    val apparelsExpenses: LiveData<List<Transaction>>
-        get() = Transformations.switchMap(selectedMonth) { selectedMonth ->
-            Transformations.map(_apparelsExpenses) {
-                it.filter { transaction ->
-                    SimpleDateFormat("MMMM").format(transaction.date) == selectedMonth
-                }
-            }
-        }
-
-    private val _foodExpenses = budgetRepository.getTransactions("Food").asLiveData()
-    val foodExpenses: LiveData<List<Transaction>>
-        get() = Transformations.switchMap(selectedMonth) { selectedMonth ->
-            Transformations.map(_foodExpenses) {
-                it.filter { transaction ->
-                    SimpleDateFormat("MMMM").format(transaction.date) == selectedMonth
-                }
-            }
-        }
-
-    private val _housingExpenses = budgetRepository.getTransactions("Housing").asLiveData()
-    val housingExpenses: LiveData<List<Transaction>>
-        get() = Transformations.switchMap(selectedMonth) { selectedMonth ->
-            Transformations.map(_housingExpenses) {
-                it.filter { transaction ->
-                    SimpleDateFormat("MMMM").format(transaction.date) == selectedMonth
-                }
-            }
-        }
-
-    private val _transitExpenses = budgetRepository.getTransactions("Transit").asLiveData()
-    val transitExpenses: LiveData<List<Transaction>>
-        get() = Transformations.switchMap(selectedMonth) { selectedMonth ->
-            Transformations.map(_transitExpenses) {
-                it.filter { transaction ->
-                    SimpleDateFormat("MMMM").format(transaction.date) == selectedMonth
-                }
-            }
-        }
-
-    private val _shoppingExpenses = budgetRepository.getTransactions("Shopping").asLiveData()
-    val shoppingExpenses: LiveData<List<Transaction>>
-        get() = Transformations.switchMap(selectedMonth) { selectedMonth ->
-            Transformations.map(_shoppingExpenses) {
-                it.filter { transaction ->
-                    SimpleDateFormat("MMMM").format(transaction.date) == selectedMonth
-                }
-            }
-        }
-
-
-    private val _healthExpenses = budgetRepository.getTransactions("Health").asLiveData()
-    val healthExpenses: LiveData<List<Transaction>>
-        get() = Transformations.switchMap(selectedMonth) { selectedMonth ->
-            Transformations.map(_healthExpenses) {
-                it.filter { transaction ->
-                    SimpleDateFormat("MMMM").format(transaction.date) == selectedMonth
-                }
-            }
-        }
-
-    private val _leisureExpenses = budgetRepository.getTransactions("Leisure").asLiveData()
-    val leisureExpenses: LiveData<List<Transaction>>
-        get() = Transformations.switchMap(selectedMonth) { selectedMonth ->
-            Transformations.map(_leisureExpenses) {
-                it.filter { transaction ->
-                    SimpleDateFormat("MMMM").format(transaction.date) == selectedMonth
-                }
-            }
-        }
-
-    private val _allCategory = MutableLiveData<MutableList<Pair<CategoryType, List<Transaction>?>>>(
-        mutableListOf<Pair<CategoryType, List<Transaction>?>>(
-//            Pair(CategoryType.APPARELS, apparelsExpenses.value),
-//            Pair(CategoryType.FOOD, foodExpenses.value),
-//            Pair(CategoryType.HOUSING, housingExpenses.value),
-//            Pair(CategoryType.SHOPPING, shoppingExpenses.value),
-//            Pair(CategoryType.HEALTH, healthExpenses.value),
-//            Pair(CategoryType.TRANSIT, transitExpenses.value),
-//            Pair(CategoryType.LEISURE, leisureExpenses.value)
-        )
-    )
-
     val monthBudget = MediatorLiveData<LiveData<Int>>()
 
     private val _allTransactions = budgetRepository.getAllTransactions().asLiveData()
@@ -143,6 +59,9 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
             }
         }
 
+    private val _allCategory =
+        MutableLiveData<MutableList<Pair<CategoryType, List<Transaction>?>>>(mutableListOf<Pair<CategoryType, List<Transaction>?>>())
+
     val allCategory: LiveData<List<Pair<CategoryType, List<Transaction>?>>>
         get() = Transformations.switchMap(monthTransactions) { transactions ->
             Transformations.map(_allCategory) {
@@ -179,7 +98,7 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
                 it.sortedByDescending { pair ->
                     var sum = 0F
                     pair.second?.let {
-                        for (item in it){
+                        for (item in it) {
                             sum += item.cost
                         }
                     }
@@ -235,28 +154,9 @@ class HomeViewModel @Inject constructor(private val budgetRepository: BudgetRepo
         _sortByCost.value = id == R.id.action_sort_by_cost
     }
 
-    fun createTransaction(transaction: Transaction) {
-        viewModelScope.launch(Dispatchers.IO) {
-            budgetRepository.createTransaction(transaction)
-        }
-    }
-
     fun removeTransaction(transaction: Transaction) {
         viewModelScope.launch(Dispatchers.IO) {
             budgetRepository.removeTransaction(transaction)
-        }
-    }
-
-    //Editing Transaction
-
-    var targetedTransaction: Transaction? = null
-    fun editTransaction(transaction: Transaction) {
-        targetedTransaction = transaction
-    }
-
-    fun updateTransaction(transaction: Transaction) {
-        viewModelScope.launch(Dispatchers.IO) {
-            budgetRepository.updateTransaction(transaction)
         }
     }
 }

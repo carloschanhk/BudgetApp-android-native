@@ -9,17 +9,19 @@
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp">
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp">
 
         <TextView
             android:id="@+id/tv_budget_dialog_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:text="Set Month Budget"
+            android:textColor="@color/color_main"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -27,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_budget_dialog_title"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -34,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Month: "
+                android:textColor="@color/color_main"
                 android:textSize="18sp" />
 
             <Spinner
@@ -54,7 +58,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="HKD: "
+                android:text="Amount: "
+                android:textColor="@color/color_main"
                 android:textSize="18sp" />
 
             <EditText
@@ -67,23 +72,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/layout_budget_input">
+            android:layout_below="@id/layout_budget_input"
+            android:layout_marginTop="10dp">
+
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/transparent"
-                android:textColor="@color/color_main_50"
                 android:onClick="@{()-> fragment.onCancelButton()}"
-                android:text="Cancel"/>
+                android:text="Cancel"
+                android:textColor="@color/color_main_50" />
+
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/transparent"
-                android:textColor="@color/color_main_50"
                 android:onClick="@{()-> fragment.onConfirmButton()}"
-                android:text="Confirm"/>
+                android:text="Confirm"
+                android:textColor="@color/color_main_50" />
 
 
         </LinearLayout>

@@ -3,33 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/HomeFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/HomeFragment"
         android:name="com.example.budget.ui.home.HomeFragment"
         android:label="Expenses"
         tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_HomeFragment_to_transactionCreationDialogFragment"
+            app:destination="@id/transactionCreationDialogFragment" />
         <action
-            android:id="@+id/action_FirstFragment_to_setBudgetDialogFragment"
+            android:id="@+id/action_HomeFragment_to_setBudgetDialogFragment"
             app:destination="@id/setBudgetDialogFragment" />
         <action
-            android:id="@+id/action_FirstFragment_to_transactionCreationDialogFragment"
-            app:destination="@id/transactionCreationDialogFragment" />
+            android:id="@+id/action_HomeFragment_to_SpendingDetailFragment"
+            app:destination="@id/SpendingDetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.budget.ui.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/SpendingDetailFragment"
+        android:name="com.example.budget.ui.spending_details.SpendingDetailsFragment"
+        android:label="{category}"
+        tools:layout="@layout/fragment_spending_detail">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/HomeFragment" />
+        <argument
+            android:name="category"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_SpendingDetailFragment_to_transactionCreationDialogFragment"
+            app:destination="@id/transactionCreationDialogFragment" />
     </fragment>
     <dialog
         android:id="@+id/setBudgetDialogFragment"
@@ -38,5 +44,16 @@
     <dialog
         android:id="@+id/transactionCreationDialogFragment"
         android:name="com.example.budget.ui.dialog.TransactionCreationDialogFragment"
-        android:label="TransactionCreationDialogFragment" />
+        android:label="TransactionCreationDialogFragment" >
+        <argument
+            android:name="transaction"
+            app:argType="com.example.budget.data.expense.Transaction"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="category"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </dialog>
 </navigation>

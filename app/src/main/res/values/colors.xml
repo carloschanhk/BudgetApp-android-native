@@ -12,10 +12,12 @@
     <color name="color_main_25">#00FFFF</color>
     <color name="transparent">#00000000</color>
     <color name="transparent_white">#E6FFFFFF</color>
+    <color name="spending_detail_box_background">#DADBDD</color>
     <color name="grey">#B8BAC1</color>
     <color name="orange">#E89B2B</color>
     <color name="pink">#9C27B0</color>
     <color name="green">#4CAF50</color>
     <color name="red">#DF2626</color>
     <color name="yellow">#DEF414</color>
+    <color name="brown">#A66A11</color>
 </resources>

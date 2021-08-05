@@ -2,6 +2,7 @@ package com.example.budget.data.expense
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.*
 
 @Entity(tableName = "transaction")
@@ -12,5 +13,5 @@ data class Transaction(
     var date: Date,
     var cost: Float,
     var title: String,
-)
+) : Serializable
 

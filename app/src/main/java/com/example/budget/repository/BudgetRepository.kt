@@ -16,7 +16,7 @@ class BudgetRepository @Inject constructor(private val expenseDao: ExpenseDao, p
         expenseDao.createTransaction(transaction)
     }
 
-    fun getTransactions(category: String): Flow<MutableList<Transaction>> {
+    fun getTransactions(category: String): List<Transaction> {
         return expenseDao.getTransactions(category)
     }
 

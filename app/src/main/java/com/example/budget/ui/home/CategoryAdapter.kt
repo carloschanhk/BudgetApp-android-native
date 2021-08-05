@@ -3,6 +3,7 @@ package com.example.budget.ui.home
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,8 @@ import com.example.budget.databinding.HomeItemCategoryBinding
 
 class CategoryAdapter(
     private val fragmentContext: Context,
-    private val homeViewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel,
+    private val navController: NavController,
 ) : ListAdapter<Pair<CategoryType, List<Transaction>?>, CategoryAdapter.CategoryViewHolder>(
     DiffCallback
 ) {
@@ -38,13 +40,17 @@ class CategoryAdapter(
             transactions: List<Transaction>?,
             categoryType: CategoryType,
             homeViewModel: HomeViewModel,
-            fragmentContext: Context
+            fragmentContext: Context,
+            navController: NavController,
         ) {
             binding.apply {
                 context = fragmentContext
                 this.transactions = transactions
                 this.categoryType = categoryType
                 this.viewModel = homeViewModel
+                categoryItemLayout.setOnClickListener {
+                    navController.navigate(HomeFragmentDirections.actionHomeFragmentToSpendingDetailFragment(categoryType.type))
+                }
             }
             binding.executePendingBindings()
         }
@@ -62,6 +68,6 @@ class CategoryAdapter(
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val pair = getItem(position)
-        holder.bind(pair.second,pair.first,homeViewModel,fragmentContext)
+        holder.bind(pair.second,pair.first,homeViewModel,fragmentContext,navController)
     }
 }

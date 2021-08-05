@@ -42,7 +42,7 @@ class SetBudgetDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         etBudgetInput = view.findViewById(R.id.et_budget_input)
         spMonthInput = view.findViewById(R.id.spinner_set_month)
-        categoryAdapter = activity?.findViewById<RecyclerView>(R.id.rv_category)?.adapter as CategoryAdapter
+        categoryAdapter = activity?.findViewById<RecyclerView>(R.id.rv_home_category)?.adapter as CategoryAdapter
         binding?.apply {
             fragment = this@SetBudgetDialogFragment
         }
